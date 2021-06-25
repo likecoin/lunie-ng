@@ -1,15 +1,15 @@
 export default {
-  id: 'likecoin-chain-sheungwan',
-  name: 'LikeCoin chain',
+  id: 'likecoin-chain-iscn-dev-2', // DEPRECATE, only used for Lunie extension, NOT CHAIN ID
+  name: 'LikeCoin Taipei test chain',
   description:
     'LikeCoin is a decentralized publishing infrastructure. It provides a comprehensive metadata framework to facilitate content registration, licensing, and monetization for all media types.',
   logo: `logo.svg`,
-  website: 'https://like.co',
-  siteURL: 'https://stake.like.co',
-  apiURL: 'https://mainnet-node.like.co', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
-  rpcURL: 'ws://mainnet-node.like.co:26657',
-  stakingWalletURL: 'https://stake.like.co',
-  authcoreURL: 'https://authcore.like.co',
+  website: 'https://rinkeby.like.co',
+  siteURL: 'https://likecoin-chain-iscn-dev-2.netlify.app',
+  apiURL: 'https://node.iscn-dev-2.like.co', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
+  rpcURL: 'ws://node.iscn-dev-2.like.co:26657',
+  authcoreURL: 'https://likecoin-integration-test.authcore.io',
+  stakingWalletURL: 'https://likecoin-chain-iscn-dev-2.netlify.app',
   minBlockHeight: 1,
   stakingDenom: 'LIKE',
   coinLookup: [
@@ -37,7 +37,7 @@ export default {
       ],
     },
   },
-  icon: `https://like.co/logo.png`,
+  icon: `https://rinkeby.like.co/logo.png`,
 
   // This is only to be used as a developer tool and for testing purposes
   // NEVER ENABLE LOCALSIGNING IN PRODUCTION OR FOR MAINNETS
