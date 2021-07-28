@@ -1,21 +1,20 @@
 export default {
-  id: 'likecoin-mainnet-2',
-  name: 'LikeCoin chain',
+  id: 'likecoin-public-testnet-3',
+  name: 'LikeCoin public test chain',
   description:
     'LikeCoin is a decentralized publishing infrastructure. It provides a comprehensive metadata framework to facilitate content registration, licensing, and monetization for all media types.',
   logo: `logo.svg`,
-  website: 'https://like.co',
+  website: 'https://rinkeby.like.co',
   siteURL: 'https://stake.like.co',
-  apiURL: 'https://mainnet-node.like.co',
-  rpcURL: 'https://mainnet-node.like.co/rpc/',
-  stakingWalletURL: 'https://stake.like.co',
+  apiURL: 'https://likecoin-public-testnet-lcd.nnkken.dev/',
+  rpcURL: 'https://likecoin-public-testnet-rpc.nnkken.dev/',
   authcoreURL: 'https://authcore.like.co',
-  minBlockHeight: 1,
-  stakingDenom: 'LIKE',
+  stakingWalletURL: 'https://stake.like.co',
+  stakingDenom: 'EKIL',
   coinLookup: [
     {
-      viewDenom: 'LIKE',
-      chainDenom: 'nanolike',
+      viewDenom: 'EKIL',
+      chainDenom: 'nanoekil',
       chainToViewConversionFactor: '0.000000001',
       icon: `currencies/like.png`,
       coinGeckoId: 'likecoin',
@@ -31,7 +30,7 @@ export default {
       gasEstimate: 350000,
       feeOptions: [
         {
-          denom: 'LIKE',
+          denom: 'EKIL',
           amount: 0.035,
         },
       ],
