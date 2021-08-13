@@ -621,7 +621,7 @@ export function getValidatorUptimePercentage(validator, signedBlocksWindow) {// 
   }
 }
 
-export function validatorReducer(validator, annualProvision, supply, pool) {
+export function validatorReducer(validator, annualProvision, totalShares, pool) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
   if (!websiteURL || websiteURL === '[do-not-modify]') {
@@ -644,7 +644,7 @@ export function validatorReducer(validator, annualProvision, supply, pool) {
     website: websiteURL,
     identity: validator.description.identity,
     name: validator.description.moniker,
-    votingPower: (validator.tokens / supply).toFixed(6),
+    votingPower: (validator.delegator_shares / totalShares).toFixed(6),
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,

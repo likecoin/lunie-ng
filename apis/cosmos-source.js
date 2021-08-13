@@ -209,15 +209,15 @@ export default class CosmosAPI {
     const [
       validators,
       annualProvision,
-      supply,
       pool
     ] = await Promise.all([
       this.query(`staking/validators?status=BOND_STATUS_BONDED`),
       this.getAnnualProvision().catch(() => undefined),
-      this.getStakingSupply(),
       this.query(`cosmos/staking/v1beta1/pool`)
     ])
-    return validators.result.map(validator => reducers.validatorReducer(validator, annualProvision, supply, pool))
+    const shareReducer = (accumulator, currentValidator) => accumulator + currentValidator.delegator_shares;
+    const totalShares = validators.result.reduce(shareReducer, 0);
+    return validators.result.map(validator => reducers.validatorReducer(validator, annualProvision, totalShares, pool))
 
   }
 
