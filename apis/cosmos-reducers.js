@@ -644,7 +644,7 @@ export function validatorReducer(validator, annualProvision, totalShares, pool) 
     website: websiteURL,
     identity: validator.description.identity,
     name: validator.description.moniker,
-    votingPower: (validator.delegator_shares / totalShares).toFixed(6),
+    votingPower: validator.status === 3 ? (validator.delegator_shares / totalShares).toFixed(6) : '0',
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
