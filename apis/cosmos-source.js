@@ -217,8 +217,10 @@ export default class CosmosAPI {
       this.getAnnualProvision().catch(() => undefined),
       this.query(`cosmos/staking/v1beta1/pool`)
     ])
-    const shareReducer = (accumulator, currentValidator) => accumulator + currentValidator.delegator_shares;
-    const totalShares = activeValidators.result.reduce(shareReducer, 0);
+    const totalShares = activeValidators.result.reduce(
+      (sum, { delegator_shares: delegatorShares }) => sum.plus(delegatorShares),
+      BigNumber(0)
+    )
     const validators = activeValidators.result.concat(inactiveValidators.result);
     return validators.map(validator => reducers.validatorReducer(validator, annualProvision, totalShares, pool))
 
