@@ -28,6 +28,24 @@
     </CommonFormGroup>
 
     <CommonFormGroup
+      class="action-modal-form-group"
+      field-id="to"
+      field-label="To"
+    >
+      <select id="to" v-model="destinationValidator">
+        <option disabled value="">Destination Validator</option>
+        <option
+          v-for="(validator, index) in sortedEnrichedValidators"
+          :key="validator.operatorAddress"
+          :index="index"
+          :value="validator"
+        >
+          {{ enhancedDestinationValidator(validator) }}
+        </option>
+      </select>
+    </CommonFormGroup>
+
+    <CommonFormGroup
       :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
@@ -88,6 +106,7 @@
 <script>
 import { mapState } from 'vuex'
 import { required, decimal } from 'vuelidate/lib/validators'
+import { orderBy } from 'lodash'
 import { SMALLEST } from '~/common/numbers'
 import { validatorEntry } from '~/common/address'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
@@ -103,9 +122,9 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    destinationValidator: {
-      type: Object,
-      default: () => ({}),
+    validators: {
+      type: Array,
+      required: true,
     },
   },
   data: () => ({
@@ -114,6 +133,11 @@ export default {
     smallestAmount: SMALLEST,
     stakingDenom: network.stakingDenom,
     network,
+    destinationValidator: {},
+    sort: {
+      property: `votingPower`,
+      order: `desc`,
+    },
   }),
   computed: {
     ...mapState(`data`, [`delegations`]),
@@ -149,6 +173,22 @@ export default {
     },
     enhancedSourceValidator() {
       return validatorEntry(this.sourceValidator)
+    },
+    sortedEnrichedValidators() {
+      const orderedValidators = orderBy(
+        this.validators
+          .filter(
+            (validator) =>
+              validator.operatorAddress !== this.sourceValidator.operatorAddress
+          )
+          .map((validator) => ({
+            ...validator,
+            smallName: validator.name ? validator.name.toLowerCase() : '',
+          })),
+        [this.sort.property],
+        [this.sort.order]
+      )
+      return orderedValidators
     },
   },
   validations() {
@@ -187,6 +227,9 @@ export default {
     },
     onSuccess(event) {
       this.$emit(`success`, event)
+    },
+    enhancedDestinationValidator(destinationValidator) {
+      return validatorEntry(destinationValidator)
     },
   },
 }

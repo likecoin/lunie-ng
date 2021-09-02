@@ -143,7 +143,11 @@
       :source-validator="validator"
       :is-unnomination="true"
     />
-    <LazyModalRestake ref="RestakeModal" :source-validator="validator" />
+    <LazyModalRestake
+      ref="RestakeModal"
+      :source-validator="validator"
+      :validators="validators"
+    />
   </div>
 </template>
 
