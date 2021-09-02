@@ -27,6 +27,19 @@ export function StakeTx(senderAddress, { to, amount }, network) {
   }
 }
 
+export function RestakeTx(senderAddress, { from, to, amount }, network) {
+  /* istanbul ignore next */
+  return {
+    type: `cosmos-sdk/MsgBeginRedelegate`,
+    value: {
+      delegator_address: senderAddress,
+      validator_src_address: from[0],
+      validator_dst_address: to[0],
+      amount: Coin(amount, network.coinLookup),
+    },
+  }
+}
+
 export function UnstakeTx(senderAddress, { from, amount }, network) {
   /* istanbul ignore next */
   return {
@@ -99,6 +112,7 @@ export function Coin({ amount, denom }, coinLookup) {
 export default {
   SendTx,
   StakeTx,
+  RestakeTx,
   UnstakeTx,
   ClaimRewardsTx,
   VoteTx,
