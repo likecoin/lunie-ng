@@ -38,6 +38,12 @@
             type="secondary"
             @click.native="openUnstakeModal"
           />
+          <CommonButton
+            :disabled="!delegation"
+            :value="`Restake`"
+            type="secondary"
+            @click.native="openRestakeModal"
+          />
         </div>
       </div>
 
@@ -137,6 +143,7 @@
       :source-validator="validator"
       :is-unnomination="true"
     />
+    <LazyModalRestake ref="RestakeModal" :source-validator="validator" />
   </div>
 </template>
 
@@ -210,6 +217,10 @@ export default {
     /* istanbul ignore next */
     openUnstakeModal() {
       this.$refs.UnstakeModal.open()
+    },
+    /* istanbul ignore next */
+    openRestakeModal() {
+      this.$refs.RestakeModal.open()
     },
     /* istanbul ignore next */
     isBlankField(field, alternateFilter) {
@@ -313,8 +324,12 @@ h5 {
   align-items: center;
 }
 
-.action-buttons button:first-child {
+.action-buttons button {
   margin-right: 0.5rem;
+}
+
+.action-buttons button:last-child {
+  margin-right: 0;
 }
 
 .status-container {
