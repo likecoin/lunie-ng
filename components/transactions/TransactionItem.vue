@@ -245,8 +245,9 @@ export default {
         const targetReceiverIndex = this.transaction.details.to.findIndex(
           (o) => o === this.session.address
         )
-        const receivedLIKE =
-          this.transaction.details.amounts[targetReceiverIndex]
+        const receivedLIKE = this.transaction.details.amounts[
+          targetReceiverIndex
+        ]
         return [receivedLIKE]
       }
       return null
