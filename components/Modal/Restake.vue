@@ -32,17 +32,12 @@
       field-id="to"
       field-label="To"
     >
-      <select id="to" v-model="destinationValidator">
-        <option disabled value="">Destination Validator</option>
-        <option
-          v-for="(validator, index) in sortedEnrichedValidators"
-          :key="validator.operatorAddress"
-          :index="index"
-          :value="validator"
-        >
-          {{ enhancedDestinationValidator(validator) }}
-        </option>
-      </select>
+      <CommonField
+        id="to"
+        v-model="destinationValidatorAddress"
+        :options="sortedEnrichedValidators"
+        type="select"
+      />
     </CommonFormGroup>
 
     <CommonFormGroup
@@ -133,7 +128,7 @@ export default {
     smallestAmount: SMALLEST,
     stakingDenom: network.stakingDenom,
     network,
-    destinationValidator: {},
+    destinationValidatorAddress: null,
     sort: {
       property: `votingPower`,
       order: `desc`,
@@ -155,10 +150,9 @@ export default {
           this.sourceValidator && this.sourceValidator.operatorAddress
             ? [this.sourceValidator.operatorAddress]
             : null,
-        to:
-          this.destinationValidator && this.destinationValidator.operatorAddress
-            ? [this.destinationValidator.operatorAddress]
-            : null,
+        to: this.destinationValidatorAddress
+          ? [this.destinationValidatorAddress]
+          : null,
         amount: {
           amount: this.amount,
           denom: this.stakingDenom,
@@ -176,18 +170,18 @@ export default {
     },
     sortedEnrichedValidators() {
       const orderedValidators = orderBy(
-        this.validators
-          .filter(
-            (validator) =>
-              validator.operatorAddress !== this.sourceValidator.operatorAddress
-          )
-          .map((validator) => ({
-            ...validator,
-            smallName: validator.name ? validator.name.toLowerCase() : '',
-          })),
+        this.validators,
         [this.sort.property],
         [this.sort.order]
       )
+        .filter(
+          (validator) =>
+            validator.operatorAddress !== this.sourceValidator.operatorAddress
+        )
+        .map((validator) => ({
+          key: this.enhancedDestinationValidator(validator),
+          value: validator.operatorAddress,
+        }))
       return orderedValidators
     },
   },
