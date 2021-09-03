@@ -229,7 +229,8 @@ export default {
       this.$emit(`success`, event)
     },
     enhancedDestinationValidator(destinationValidator) {
-      const prefix = destinationValidator.jailed ? '(inactive) ' : ''
+      const prefix =
+        destinationValidator.status === 'INACTIVE' ? '(inactive) ' : ''
       return prefix + validatorEntry(destinationValidator)
     },
   },
