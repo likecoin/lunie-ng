@@ -328,12 +328,8 @@ h5 {
   align-items: center;
 }
 
-.action-buttons button {
+.action-buttons button:not(:last-child) {
   margin-right: 0.5rem;
-}
-
-.action-buttons button:last-child {
-  margin-right: 0;
 }
 
 .status-container {

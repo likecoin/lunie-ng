@@ -129,10 +129,6 @@ export default {
     stakingDenom: network.stakingDenom,
     network,
     destinationValidatorAddress: null,
-    sort: {
-      property: `votingPower`,
-      order: `desc`,
-    },
   }),
   computed: {
     ...mapState(`data`, [`delegations`]),
@@ -171,8 +167,8 @@ export default {
     sortedEnrichedValidators() {
       const orderedValidators = orderBy(
         this.validators,
-        [this.sort.property],
-        [this.sort.order]
+        [`votingPower`],
+        [`desc`]
       )
         .filter(
           (validator) =>
@@ -224,7 +220,7 @@ export default {
     },
     enhancedDestinationValidator(destinationValidator) {
       const prefix =
-        destinationValidator.status === 'INACTIVE' ? '(inactive) ' : ''
+        destinationValidator.status === 'INACTIVE' ? '(Inactive) ' : ''
       return prefix + validatorEntry(destinationValidator)
     },
   },
