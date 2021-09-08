@@ -65,7 +65,8 @@
 </template>
 
 <script>
-import { SMALLEST, decimal } from '~/common/numbers'
+import { decimal } from 'vuelidate/lib/validators'
+import { SMALLEST } from '~/common/numbers'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
