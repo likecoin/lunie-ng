@@ -55,28 +55,28 @@
       <span v-else-if="maximum === 0" class="form-message">
         You don't have any tokens staked with this validator.
       </span>
-      <FormMessage
+      <CommonFormMessage
         v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
-      <FormMessage
+      <CommonFormMessage
         v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
-      <FormMessage
+      <CommonFormMessage
         v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${stakingDenom} to proceed.`"
       />
-      <FormMessage
+      <CommonFormMessage
         v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
-      <FormMessage
+      <CommonFormMessage
         v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"

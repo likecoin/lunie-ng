@@ -64,7 +64,7 @@
               type="password"
               placeholder="Password"
             />
-            <FormMessage
+            <CommonFormMessage
               v-if="$v.password.$error && $v.password.$invalid"
               name="Password"
               type="required"

@@ -9,7 +9,7 @@
         >Show on Ledger</a
       >
     </div> -->
-    <!-- <FormMessage
+    <!-- <CommonFormMessage
       v-if="ledgerAddressError"
       :msg="ledgerAddressError"
       type="custom"
