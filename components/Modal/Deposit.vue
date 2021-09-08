@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { decimal } from 'vuelidate/lib/validators'
 import { SMALLEST } from '~/common/numbers'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
@@ -92,15 +93,20 @@ export default {
   },
   data: () => ({
     amount: null,
-    balance: {
-      amount: null,
-      denom: ``,
-    },
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     network,
   }),
   computed: {
+    ...mapState(`data`, [`balances`]),
+    balance() {
+      return (
+        this.balances.find(({ denom }) => denom === network.stakingDenom) || {
+          available: 0,
+          denom: network.stakingDenom,
+        }
+      )
+    },
     transactionData() {
       if (isNaN(this.amount) || !this.proposalId || !this.denom) {
         return {}
@@ -127,7 +133,7 @@ export default {
       amount: {
         required: (x) => !!x && x !== `0`,
         decimal,
-        max: (x) => Number(x) <= this.balance.amount,
+        max: (x) => Number(x) <= this.balance.available,
         min: (x) => Number(x) >= SMALLEST,
         maxDecimals: (x) => {
           if (x) {
