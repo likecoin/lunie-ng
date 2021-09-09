@@ -113,7 +113,7 @@ export default {
       }
       return {
         type: lunieMessageTypes.DEPOSIT,
-        proposalId: this.proposalId,
+        proposalId: String(this.proposalId),
         amount: {
           amount: this.amount,
           denom: this.denom,
