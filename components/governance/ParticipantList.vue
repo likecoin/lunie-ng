@@ -20,7 +20,7 @@
             participant.name
           }}</span>
           <span v-else class="name">
-            <Address :address="participant.address" />
+            <CommonAddress :address="participant.address" />
           </span>
         </div>
         <template v-if="participant.votingPower">

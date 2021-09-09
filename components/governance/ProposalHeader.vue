@@ -53,7 +53,7 @@
               proposal.proposer.name
             }}</nuxt-link>
           </div>
-          <Address v-else :address="proposal.proposer.address" />
+          <CommonAddress v-else :address="proposal.proposer.address" />
         </div>
         <p class="summary">{{ proposal.summary }}</p>
       </div>
