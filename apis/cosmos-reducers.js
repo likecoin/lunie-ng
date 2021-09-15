@@ -497,11 +497,12 @@ export function proposalReducer(
   totalBondedTokens,
   detailedVotes
 ) {
-
+  const typeStringArray = proposal.content["@type"].split('.')
+  const typeString = typeStringArray[typeStringArray.length - 1];
   return {
     id: Number(proposal.proposal_id),
     proposalId: String(proposal.proposal_id),
-    type: proposalTypeEnumDictionary[proposal.content["@type"].split('/')[1]],
+    type: proposalTypeEnumDictionary[typeString],
     title: proposal.content.title,
     description: proposal.content.description,
     creationTime: proposal.submit_time,
@@ -511,7 +512,7 @@ export function proposalReducer(
     tally: tallyReducer(proposal, detailedVotes.tally, totalBondedTokens),
     deposit: getDeposit(proposal),
     summary: getProposalSummary(
-      proposalTypeEnumDictionary[proposal.content["@type"].split('/')[1]]
+      proposalTypeEnumDictionary[typeString]
     ),
     detailedVotes,
   }
