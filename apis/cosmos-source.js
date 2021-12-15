@@ -98,10 +98,9 @@ export default class CosmosAPI {
 
   async getTransactions(address, pageNumber = 1) {
     // getting page count
-    const [senderPage, recipientPage, receiveMultiplePage] = await Promise.all([
+    const [senderPage, recipientPage] = await Promise.all([
       this.getPageCount(`/cosmos/tx/v1beta1/txs?events=message.sender='${address}'`),
-      this.getPageCount(`/cosmos/tx/v1beta1/txs?events=message.action='send'&events=transfer.recipient='${address}'`),
-      this.getPageCount(`/cosmos/tx/v1beta1/txs?events=message.action='multisend'&events=transfer.recipient='${address}'`),
+      this.getPageCount(`/cosmos/tx/v1beta1/txs?events=transfer.recipient='${address}'`),
     ])
 
     const requests = [
@@ -110,12 +109,8 @@ export default class CosmosAPI {
         senderPage - pageNumber + 1
       ),
       this.loadPaginatedTxs(
-        `/cosmos/tx/v1beta1/txs?events=message.action='send'&events=transfer.recipient='${address}'`,
+        `/cosmos/tx/v1beta1/txs?events=transfer.recipient='${address}'`,
         recipientPage - pageNumber + 1
-      ),
-      this.loadPaginatedTxs(
-        `/cosmos/tx/v1beta1/txs?events=message.action='multisend'&events=transfer.recipient='${address}'`,
-        receiveMultiplePage - pageNumber + 1
       ),
     ]
     // /*
@@ -136,16 +131,8 @@ export default class CosmosAPI {
       if (recipientPage - pageNumber > 0) {
         requests.push(
           this.loadPaginatedTxs(
-            `/cosmos/tx/v1beta1/txs?events=message.action='send'&events=transfer.recipient='${address}'`,
+            `/cosmos/tx/v1beta1/txs?events=transfer.recipient='${address}'`,
             recipientPage - pageNumber
-          )
-        )
-      }
-      if (receiveMultiplePage - pageNumber > 0) {
-        requests.push(
-          this.loadPaginatedTxs(
-            `/cosmos/tx/v1beta1/txs?events=message.action='multisend'&events=transfer.recipient='${address}'`,
-            receiveMultiplePage - pageNumber
           )
         )
       }

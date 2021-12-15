@@ -253,6 +253,13 @@ const proposalTypeEnumDictionary = {
   ParameterChangeProposal: 'PARAMETER_CHANGE',
 }
 
+function checkIsIgnoredMessageType(type) {
+  const transactionTypeSuffix = type.split('/')[1]
+  return [
+    'ibc.core.client.v1.MsgUpdateClient',
+  ].includes(transactionTypeSuffix);
+}
+
 // map Cosmos SDK message types to Lunie message types
 export function getMessageType(type) {
   const transactionTypeSuffix = type.split('/')[1]
@@ -550,10 +557,12 @@ export function transactionReducer(transaction) {
     } = transaction.tx.body.messages.reduce(
       ({ claimMessages, otherMessages }, message) => {
         // we need to aggregate all withdraws as we display them together in one transaction
-        if (getMessageType(message['@type']) === lunieMessageTypes.CLAIM_REWARDS) {
-          claimMessages.push(message)
-        } else {
-          otherMessages.push(message)
+        if (!checkIsIgnoredMessageType(message['@type'])) {
+          if (getMessageType(message['@type']) === lunieMessageTypes.CLAIM_REWARDS) {
+            claimMessages.push(message)
+          } else {
+            otherMessages.push(message)
+          }
         }
         return { claimMessages, otherMessages }
       },
