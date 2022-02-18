@@ -25,7 +25,7 @@ export const state = () => ({
   transactionsLoading: false,
   moreTransactionsAvailable: true,
   api: undefined,
-  targetValidator: undefined,
+  redirectRoute: undefined,
 })
 
 export const mutations = {
@@ -60,8 +60,8 @@ export const mutations = {
     state.transactions = []
     state.moreTransactionsAvailable = true
   },
-  setTargetValidator(state, validator) {
-    state.targetValidator = validator
+  setRedirectRoute(state, route) {
+    state.redirectRoute = route
   },
 }
 
@@ -303,7 +303,7 @@ export const actions = {
   resetSessionData({ commit }) {
     commit('resetSessionData')
   },
-  setTargetValidator({ commit }, validator) {
-    commit('setTargetValidator', validator)
+  setRedirectRoute({ commit }, route) {
+    commit('setRedirectRoute', route)
   },
 }

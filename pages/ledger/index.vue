@@ -68,8 +68,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import signInRedirect from '~/mixins/signInRedirect'
+
 export default {
   name: `SessionLedger`,
+  mixins: [signInRedirect],
   layout: 'session',
   data: () => ({
     copySuccess: false,
@@ -79,7 +82,6 @@ export default {
   }),
   computed: {
     ...mapState('ledger', [`accounts`, `error`, `loading`]),
-    ...mapState('data', ['targetValidator']),
     isWindows() {
       return this.navigator.platform.includes('Win')
     },
@@ -128,9 +130,7 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.targetValidator
-        ? this.$router.push(`/validators/${this.targetValidator}`)
-        : this.$router.push('/')
+      this.signInRedirect()
     },
   },
 }

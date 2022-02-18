@@ -25,9 +25,11 @@
 import { mapState } from 'vuex'
 import { AuthCoreWidgets } from '@likecoin/authcore-js'
 import network from '~/common/network'
+import signInRedirect from '~/mixins/signInRedirect'
 
 export default {
   name: `SessionAuthcore`,
+  mixins: [signInRedirect],
   layout: 'session',
   data() {
     return {
@@ -36,7 +38,6 @@ export default {
   },
   computed: {
     ...mapState('authcore', [`accounts`, `error`, `loading`]),
-    ...mapState('data', ['targetValidator']),
     isSigningIn() {
       const { code } = this.$route.query
       return !!code
@@ -82,9 +83,7 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.targetValidator
-        ? this.$router.push(`/validators/${this.targetValidator}`)
-        : this.$router.push('/')
+      this.signInRedirect()
     },
   },
 }

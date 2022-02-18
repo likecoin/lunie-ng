@@ -233,10 +233,6 @@ export default {
       type: String,
       default: 'UnknownTx',
     },
-    targetValidator: {
-      type: String,
-      default: undefined,
-    },
   },
   data: () => ({
     step: defaultStep,
@@ -340,7 +336,7 @@ export default {
     },
     goToSession() {
       this.close()
-      this.$store.dispatch('data/setTargetValidator', this.targetValidator)
+      this.$store.dispatch('data/setRedirectRoute', this.$route)
       this.$router.push('/welcome')
     },
     isValidInput(property) {

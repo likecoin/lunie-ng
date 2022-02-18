@@ -52,12 +52,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import signInRedirect from '~/mixins/signInRedirect'
+
 export default {
   name: `SessionKeplrExtension`,
+  mixins: [signInRedirect],
   layout: 'session',
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
-    ...mapState('data', ['targetValidator']),
   },
   watch: {
     accounts: {
@@ -81,9 +83,7 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.targetValidator
-        ? this.$router.push(`/validators/${this.targetValidator}`)
-        : this.$router.push('/')
+      this.signInRedirect()
     },
   },
 }
