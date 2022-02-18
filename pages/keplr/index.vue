@@ -57,6 +57,7 @@ export default {
   layout: 'session',
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
+    ...mapState('data', ['targetValidator']),
   },
   watch: {
     accounts: {
@@ -80,7 +81,9 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.$router.push('/')
+      this.targetValidator
+        ? this.$router.push(`/validators/${this.targetValidator}`)
+        : this.$router.push('/')
     },
   },
 }

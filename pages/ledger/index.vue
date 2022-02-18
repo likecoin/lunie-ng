@@ -79,6 +79,7 @@ export default {
   }),
   computed: {
     ...mapState('ledger', [`accounts`, `error`, `loading`]),
+    ...mapState('data', ['targetValidator']),
     isWindows() {
       return this.navigator.platform.includes('Win')
     },
@@ -127,7 +128,9 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.$router.push('/')
+      this.targetValidator
+        ? this.$router.push(`/validators/${this.targetValidator}`)
+        : this.$router.push('/')
     },
   },
 }

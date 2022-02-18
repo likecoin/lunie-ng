@@ -233,6 +233,10 @@ export default {
       type: String,
       default: 'UnknownTx',
     },
+    targetValidator: {
+      type: String,
+      default: undefined,
+    },
   },
   data: () => ({
     step: defaultStep,
@@ -253,7 +257,7 @@ export default {
     feeDenom: network.stakingDenom,
   }),
   computed: {
-    ...mapState(['session', 'currrentModalOpen']),
+    ...mapState(['session']),
     ...mapState('data', ['balances', 'balancesLoaded']),
     ...mapState('ledger', ['transport']),
     networkFees() {
@@ -263,6 +267,7 @@ export default {
       return !this.session || this.session.sessionType === SESSION_TYPES.EXPLORE
     },
     steps() {
+      if (!this.session) return []
       const isExtensionSession =
         this.session.sessionType === SESSION_TYPES.KEPLR
       return [
@@ -335,7 +340,7 @@ export default {
     },
     goToSession() {
       this.close()
-
+      this.$store.dispatch('data/setTargetValidator', this.targetValidator)
       this.$router.push('/welcome')
     },
     isValidInput(property) {
