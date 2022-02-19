@@ -11,7 +11,6 @@
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
     feature-flag="delegate"
-    :target-validator="targetValidator.id"
     @close="clear"
     @txIncluded="onSuccess"
   >
