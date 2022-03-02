@@ -31,7 +31,7 @@ export const actions = {
       dispatch('authcore/clearAccessToken')
     }
     commit('setSession', session)
-    dispatch('data/refresh')
+    dispatch('data/refresh', session)
 
     // connect to the extension ahead of signing with it
     if (session && session.sessionType === 'extension') {

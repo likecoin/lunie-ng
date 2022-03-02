@@ -70,13 +70,12 @@ export const actions = {
     commit('setApi', new DataSource(this.$axios, network))
   },
   // this is never awaited in the code
-  async refresh({ dispatch }) {
-    const calls = [dispatch('getBlock'), dispatch('refreshSession')]
+  async refresh({ dispatch }, session) {
+    const calls = [dispatch('getBlock'), dispatch('refreshSession', session)]
     await Promise.all(calls)
   },
-  async refreshSession({ dispatch }) {
+  async refreshSession({ dispatch }, session) {
     const calls = []
-    const session = this.$cookies.get('lunie-session')
     const currency = this.$cookies.get('currency') || 'USD'
     if (session) {
       const address = session.address

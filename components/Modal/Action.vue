@@ -471,7 +471,7 @@ export default {
       }
     },
     refreshData() {
-      this.$store.dispatch('data/refresh')
+      this.$store.dispatch('data/refresh', this.session)
     },
     getExternalSessionMessage(sessionType) {
       switch (sessionType) {
