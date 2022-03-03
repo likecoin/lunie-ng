@@ -72,10 +72,11 @@ export const actions = {
       if (accessToken) commit('setAccessToken', accessToken)
     }
   },
-  clearAccessToken() {
+  clearAccessToken({ commit }) {
     if (window.localStorage) {
       window.localStorage.removeItem('authcore.access_token')
     }
+    commit('setAccessToken', undefined)
   },
   async getSigner({ state, dispatch }) {
     let cosmosProvider

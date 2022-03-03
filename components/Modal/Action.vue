@@ -181,6 +181,7 @@ const SESSION_TYPES = {
   EXTENSION: `extension`,
   KEPLR: `keplr`,
   EXPLORE: `explore`,
+  AUTHCORE: `authcore`,
 }
 
 export default {
@@ -419,9 +420,10 @@ export default {
           'data/getAccountInfo',
           this.session.address
         )
-        const authcoreCosmosProvider = await this.$store.dispatch(
-          'authcore/getSigner'
-        )
+        const authcoreCosmosProvider =
+          this.session.sessionType === SESSION_TYPES.AUTHCORE
+            ? await this.$store.dispatch('authcore/getSigner')
+            : null
 
         const hashResult = await createSignBroadcast({
           messageType: type,
