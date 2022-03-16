@@ -111,11 +111,7 @@
       >
         <div slot="title">{{ submissionErrorPrefix }}</div>
         <div slot="subtitle">
-          {{
-            isTokenExpired
-              ? `Your token has expired, please sign in again.`
-              : submissionError
-          }}
+          {{ errorMessage }}
         </div>
       </CommonCard>
       <div class="action-modal-footer">
@@ -296,6 +292,11 @@ export default {
         this.submissionError &&
         this.submissionError.includes('401')
       )
+    },
+    errorMessage() {
+      return this.isTokenExpired
+        ? `Your token has expired, please sign in again.`
+        : this.submissionError
     },
   },
   watch: {
