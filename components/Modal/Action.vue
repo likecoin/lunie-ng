@@ -416,6 +416,7 @@ export default {
     },
     async submit() {
       this.submissionError = null
+      let gasEstimateMultiplier
 
       // TODO is this check really needed?
       if (
@@ -427,6 +428,13 @@ export default {
       }
 
       const { type, memo, ...message } = this.transactionData
+      switch (type) {
+        case 'ClaimRewardsTx':
+          gasEstimateMultiplier = this.validators.length
+          break
+        default:
+          gasEstimateMultiplier = 1
+      }
 
       try {
         // Lazy import as a bunch of big libraries are imported here
@@ -461,7 +469,7 @@ export default {
           chainId: block.chainId,
           ledgerTransport: this.transport,
           authcoreCosmosProvider,
-          validators: this.validators,
+          gasEstimateMultiplier,
         })
 
         const { hash } = hashResult

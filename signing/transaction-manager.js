@@ -40,7 +40,7 @@ export async function createSignBroadcast({
   memo,
   ledgerTransport,
   authcoreCosmosProvider,
-  validators,
+  gasEstimateMultiplier,
 }) {
   const feeData = getFees(messageType, feeDenom)
   const transactionData = {
@@ -83,10 +83,7 @@ export async function createSignBroadcast({
       [].concat(messages),
       {
         amount: transactionData.fee,
-        gas:
-          messageType === 'ClaimRewardsTx'
-            ? transactionData.gasEstimate * validators.length
-            : transactionData.gasEstimate,
+        gas: transactionData.gasEstimate * gasEstimateMultiplier,
       },
       chainId,
       memo || '',
