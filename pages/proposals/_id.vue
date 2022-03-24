@@ -36,11 +36,8 @@
       </template>
 
       <ModalDeposit
-        v-if="
-          proposal.detailedVotes &&
-          status.value === governanceStatusEnum.DEPOSITING
-        "
-        ref="modalDeposit"
+        v-if="shouldShowDepositModal"
+        ref="ModalDeposit"
         :proposal-id="proposalId"
         :proposal-title="proposal.title || ''"
         :denom="parameters.depositDenom || network.stakingDenom"
@@ -49,7 +46,7 @@
       />
       <ModalVote
         v-else
-        ref="modalVote"
+        ref="ModalVote"
         :proposal-id="proposalId"
         :proposal-title="proposal.title || ''"
         :last-vote-option="vote"
@@ -60,6 +57,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapState } from 'vuex'
 import BigNumber from 'bignumber.js'
 import { percent, prettyInt } from '~/common/numbers'
@@ -135,6 +133,12 @@ export default {
       }
       return undefined
     },
+    shouldShowDepositModal() {
+      return (
+        this.proposal.detailedVotes &&
+        this.status.value === governanceStatusEnum.DEPOSITING
+      )
+    },
   },
   watch: {
     proposal() {
@@ -153,13 +157,17 @@ export default {
       this.$store.dispatch('data/getProposalDetails', this.proposal)
     },
     onVote() {
-      this.$refs.modalVote.open()
+      Vue.nextTick(() => {
+        this.$refs.ModalVote.open()
+      })
     },
     afterVoteOrDeposit() {
       this.$store.dispatch('data/getProposals')
     },
     onDeposit() {
-      this.$refs.modalDeposit.open()
+      Vue.nextTick(() => {
+        this.$refs.ModalDeposit.open()
+      })
     },
   },
 }
