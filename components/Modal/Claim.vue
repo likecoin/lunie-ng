@@ -12,6 +12,7 @@
     :transaction-type="lunieMessageTypes.CLAIM_REWARDS"
     :rewards="rewards"
     :disable="validatorsWithRewards"
+    :validators="validators"
   >
     <span
       v-if="session.sessionType === SESSION_TYPES.LEDGER"

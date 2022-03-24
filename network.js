@@ -36,6 +36,15 @@ export default {
         },
       ],
     },
+    ClaimRewardsTx: {
+      gasEstimate: 140000,
+      feeOptions: [
+        {
+          denom: 'LIKE',
+          amount: 0.014,
+        },
+      ],
+    },
   },
   icon: `https://like.co/logo.png`,
 

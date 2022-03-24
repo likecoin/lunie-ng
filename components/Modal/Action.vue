@@ -236,6 +236,10 @@ export default {
       type: String,
       default: 'UnknownTx',
     },
+    validators: {
+      type: Array,
+      default: () => [],
+    },
   },
   data: () => ({
     step: defaultStep,
@@ -457,6 +461,7 @@ export default {
           chainId: block.chainId,
           ledgerTransport: this.transport,
           authcoreCosmosProvider,
+          validators: this.validators,
         })
 
         const { hash } = hashResult
