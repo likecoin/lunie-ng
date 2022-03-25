@@ -205,7 +205,7 @@ export default {
       immediate: true,
       handler(validator) {
         if (validator) {
-          this.getValidatorDelegations()
+          // this.getValidatorDelegations()
           this.getSelfStake()
         }
       },
@@ -248,12 +248,12 @@ export default {
         this.validator
       )
     },
-    async getValidatorDelegations() {
-      this.validatorDelegations = await this.$store.dispatch(
-        'data/getValidatorDelegations',
-        this.validator
-      )
-    },
+    // async getValidatorDelegations() {
+    //   this.validatorDelegations = await this.$store.dispatch(
+    //     'data/getValidatorDelegations',
+    //     this.validator
+    //   )
+    // },
   },
 }
 </script>
