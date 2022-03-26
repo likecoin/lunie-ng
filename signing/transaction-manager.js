@@ -7,7 +7,7 @@ import fees from '~/common/fees'
 import network from '~/common/network'
 import { signWithExtension } from '~/common/extension-utils'
 
-export function getFees(transactionType, feeDenom) {
+export function getFees(transactionType, feeDenom, gasEstimateMultiplier) {
   const { gasEstimate, feeOptions } = fees.getFees(transactionType)
   const fee = feeOptions.find(({ denom }) => denom === feeDenom)
   const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
@@ -15,13 +15,14 @@ export function getFees(transactionType, feeDenom) {
   const convertedFee = [
     {
       amount: BigNumber(fee.amount)
+        .multipliedBy(gasEstimateMultiplier)
         .div(coinLookup.chainToViewConversionFactor)
         .toString(),
       denom: coinLookup.chainDenom,
     },
   ]
   return {
-    gasEstimate: String(gasEstimate),
+    gasEstimate: String(gasEstimate * gasEstimateMultiplier),
     fee: convertedFee,
   }
 }
@@ -42,7 +43,7 @@ export async function createSignBroadcast({
   authcoreCosmosProvider,
   gasEstimateMultiplier,
 }) {
-  const feeData = getFees(messageType, feeDenom)
+  const feeData = getFees(messageType, feeDenom, gasEstimateMultiplier)
   const transactionData = {
     ...feeData,
     memo,
@@ -83,7 +84,7 @@ export async function createSignBroadcast({
       [].concat(messages),
       {
         amount: transactionData.fee,
-        gas: transactionData.gasEstimate * gasEstimateMultiplier,
+        gas: transactionData.gasEstimate,
       },
       chainId,
       memo || '',
