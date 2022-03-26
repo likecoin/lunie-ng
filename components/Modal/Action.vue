@@ -39,7 +39,7 @@
         <ModalTableInvoice
           v-model="feeDenom"
           :amounts="amounts"
-          :fees="networkFees.feeOptions"
+          :fees="networkFees"
         />
         <CommonFormMessage
           v-if="$v.invoiceTotal.$error && $v.invoiceTotal.$invalid"
@@ -258,13 +258,18 @@ export default {
     smallestAmount: SMALLEST,
     network,
     feeDenom: network.stakingDenom,
+    gasMultiplier: 1,
   }),
   computed: {
     ...mapState(['session']),
     ...mapState('data', ['balances', 'balancesLoaded']),
     ...mapState('ledger', ['transport']),
     networkFees() {
-      return fees.getFees(this.transactionData.type)
+      if (this.step === feeStep) {
+        return this.setNetworkFees(this.transactionData.type)
+      }
+      const defaultNetworkFees = fees.getFees(this.transactionData.type)
+      return defaultNetworkFees.feeOptions
     },
     requiresSignIn() {
       return (
@@ -306,7 +311,7 @@ export default {
   watch: {
     networkFees(fees) {
       // set the fee denom to a default in the beginning
-      this.feeDenom = fees.feeOptions[0].denom
+      this.feeDenom = fees[0].denom
     },
   },
   updated() {
@@ -328,18 +333,12 @@ export default {
       },
       invoiceTotal: {
         available: () =>
-          this.amounts
-            .concat(
-              this.networkFees.feeOptions.find(
-                ({ denom }) => denom === this.feeDenom
-              )
+          this.amounts.concat(this.networkFees).every(({ amount, denom }) => {
+            const balance = this.balances.find(
+              (balance) => balance.denom === denom
             )
-            .every(({ amount, denom }) => {
-              const balance = this.balances.find(
-                (balance) => balance.denom === denom
-              )
-              return !!balance && Number(balance.available) >= Number(amount)
-            }),
+            return !!balance && Number(balance.available) >= Number(amount)
+          }),
       },
     }
   },
@@ -414,9 +413,29 @@ export default {
         default:
       }
     },
+    setNetworkFees(type) {
+      this.gasEstimateMultiplier = this.setGasMultiplier(type)
+      const defaultNetworkFees = fees.getFees(this.transactionData.type)
+      const networkFees = [
+        {
+          amount: BigNumber(defaultNetworkFees.feeOptions[0].amount)
+            .multipliedBy(this.gasEstimateMultiplier)
+            .toString(),
+          denom: this.feeDenom,
+        },
+      ]
+      return networkFees
+    },
+    setGasMultiplier(type) {
+      switch (type) {
+        case 'ClaimRewardsTx':
+          return this.validators.length
+        default:
+          return 1
+      }
+    },
     async submit() {
       this.submissionError = null
-      let gasEstimateMultiplier
 
       // TODO is this check really needed?
       if (
@@ -428,13 +447,7 @@ export default {
       }
 
       const { type, memo, ...message } = this.transactionData
-      switch (type) {
-        case 'ClaimRewardsTx':
-          gasEstimateMultiplier = this.validators.length
-          break
-        default:
-          gasEstimateMultiplier = 1
-      }
+      this.gasEstimateMultiplier = this.setGasMultiplier(type)
 
       try {
         // Lazy import as a bunch of big libraries are imported here
@@ -469,7 +482,7 @@ export default {
           chainId: block.chainId,
           ledgerTransport: this.transport,
           authcoreCosmosProvider,
-          gasEstimateMultiplier,
+          gasEstimateMultiplier: this.gasEstimateMultiplier,
         })
 
         const { hash } = hashResult
