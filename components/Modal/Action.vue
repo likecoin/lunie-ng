@@ -258,7 +258,6 @@ export default {
     smallestAmount: SMALLEST,
     network,
     feeDenom: network.stakingDenom,
-    gasMultiplier: 1,
   }),
   computed: {
     ...mapState(['session']),
@@ -414,19 +413,19 @@ export default {
       }
     },
     setNetworkFees(type) {
-      this.gasEstimateMultiplier = this.setGasMultiplier(type)
-      const defaultNetworkFees = fees.getFees(this.transactionData.type)
+      const gasEstimateMultiplier = this.calculateGasMultiplier(type)
+      const defaultNetworkFees = fees.getFees(type)
       const networkFees = [
         {
           amount: BigNumber(defaultNetworkFees.feeOptions[0].amount)
-            .multipliedBy(this.gasEstimateMultiplier)
+            .multipliedBy(gasEstimateMultiplier)
             .toString(),
           denom: this.feeDenom,
         },
       ]
       return networkFees
     },
-    setGasMultiplier(type) {
+    calculateGasMultiplier(type) {
       switch (type) {
         case 'ClaimRewardsTx':
           return this.validators.length
@@ -447,7 +446,7 @@ export default {
       }
 
       const { type, memo, ...message } = this.transactionData
-      this.gasEstimateMultiplier = this.setGasMultiplier(type)
+      const gasEstimateMultiplier = this.calculateGasMultiplier(type)
 
       try {
         // Lazy import as a bunch of big libraries are imported here
@@ -482,7 +481,7 @@ export default {
           chainId: block.chainId,
           ledgerTransport: this.transport,
           authcoreCosmosProvider,
-          gasEstimateMultiplier: this.gasEstimateMultiplier,
+          gasEstimateMultiplier,
         })
 
         const { hash } = hashResult
