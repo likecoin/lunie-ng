@@ -265,7 +265,7 @@ export default {
     ...mapState('ledger', ['transport']),
     networkFees() {
       if (this.step === feeStep) {
-        return this.setNetworkFees(this.transactionData.type)
+        return this.calculateNetworkFees(this.transactionData.type)
       }
       const defaultNetworkFees = fees.getFees(this.transactionData.type)
       return defaultNetworkFees.feeOptions
@@ -412,7 +412,7 @@ export default {
         default:
       }
     },
-    setNetworkFees(type) {
+    calculateNetworkFees(type) {
       const gasEstimateMultiplier = this.calculateGasMultiplier(type)
       const defaultNetworkFees = fees.getFees(type)
       const networkFees = [
