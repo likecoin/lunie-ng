@@ -211,6 +211,9 @@ export default {
       },
     },
   },
+  mounted() {
+    if (!this.validators.length) this.$store.dispatch('data/getValidators')
+  },
   methods: {
     date,
     shortDecimals,
