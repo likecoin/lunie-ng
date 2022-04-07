@@ -142,7 +142,7 @@ export async function pollTxInclusion(txHash, iteration = 0) {
   const MAX_POLL_ITERATIONS = 30
   let txFound = false
   try {
-    await fetch(`${network.apiURL}/txs/${txHash}`).then((res) => {
+    await fetch(`${network.apiURL}/cosmos/tx/v1beta1/txs/${txHash}`).then((res) => {
       if (res.status === 200) {
         txFound = true
       }
