@@ -1,15 +1,15 @@
 export default {
-  id: 'likecoin-mainnet-2',
-  name: 'LikeCoin chain',
+  id: 'likecoin-v2-dev-chain',
+  name: 'LikeCoin v2 test chain',
   description:
     'LikeCoin is a decentralized publishing infrastructure. It provides a comprehensive metadata framework to facilitate content registration, licensing, and monetization for all media types.',
   logo: `logo.svg`,
-  website: 'https://like.co',
-  siteURL: 'https://dao.like.co',
-  apiURL: 'https://mainnet-node.like.co',
-  rpcURL: 'https://mainnet-node.like.co/rpc/',
-  stakingWalletURL: 'https://dao.like.co',
-  authcoreURL: 'https://authcore.like.co',
+  website: 'https://rinkeby.like.co',
+  siteURL: 'https://likecoin-v2-dev-chain.netlify.app',
+  apiURL: 'https://node.v2-dev.like.co',
+  rpcURL: 'https://node.v2-dev.like.co/rpc/',
+  authcoreURL: 'https://likecoin-integration-test.authcore.io',
+  stakingWalletURL: 'https://likecoin-v2-dev-chain.netlify.app',
   minBlockHeight: 1,
   stakingDenom: 'LIKE',
   coinLookup: [
@@ -21,9 +21,9 @@ export default {
       coinGeckoId: 'likecoin',
     },
   ],
-  addressPrefix: 'cosmos',
-  validatorAddressPrefix: 'cosmosvaloper',
-  validatorConsensusaddressPrefix: 'cosmosvalcons', // needed to map validators from staking queries to the validator set
+  addressPrefix: 'like',
+  validatorAddressPrefix: 'likevaloper',
+  validatorConsensusaddressPrefix: 'likevalcons',
   HDPath: `m/44'/118'/0'/0/0`,
   lockUpPeriod: `21 days`,
   fees: {
@@ -46,7 +46,7 @@ export default {
       ],
     },
   },
-  icon: `https://like.co/logo.png`,
+  icon: `https://rinkeby.like.co/logo.png`,
 
   // This is only to be used as a developer tool and for testing purposes
   // NEVER ENABLE LOCALSIGNING IN PRODUCTION OR FOR MAINNETS
