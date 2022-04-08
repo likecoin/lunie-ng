@@ -1,6 +1,6 @@
 export default {
   id: 'likecoin-chain-iscn-dev-2', // DEPRECATE, only used for Lunie extension, NOT CHAIN ID
-  name: 'LikeCoin Taipei test chain',
+  name: 'LikeCoin iscn-dev-2 test chain',
   description:
     'LikeCoin is a decentralized publishing infrastructure. It provides a comprehensive metadata framework to facilitate content registration, licensing, and monetization for all media types.',
   logo: `logo.svg`,
@@ -21,9 +21,9 @@ export default {
       coinGeckoId: 'likecoin',
     },
   ],
-  addressPrefix: 'cosmos',
-  validatorAddressPrefix: 'cosmosvaloper',
-  validatorConsensusaddressPrefix: 'cosmosvalcons', // needed to map validators from staking queries to the validator set
+  addressPrefix: 'like',
+  validatorAddressPrefix: 'likevaloper',
+  validatorConsensusaddressPrefix: 'likevalcons', // needed to map validators from staking queries to the validator set
   HDPath: `m/44'/118'/0'/0/0`,
   lockUpPeriod: `21 days`,
   fees: {
