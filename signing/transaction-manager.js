@@ -13,7 +13,7 @@ import {
   makeAuthInfoBytes,
   Registry,
 } from '@cosmjs/proto-signing'
-import { fromBase64, toHex } from '@cosmjs/encoding'
+import { fromBase64, toBase64 } from '@cosmjs/encoding'
 import { Int53 } from '@cosmjs/math'
 import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
@@ -151,10 +151,9 @@ export async function createSignBroadcast({
     authInfoBytes: signedAuthInfoBytes,
     signatures: [fromBase64(signedTx.signatures[0].signature)],
   })
-  const txBytes = TxRaw.encode(twRaw).finish()
-  const txBytesHex = toHex(txBytes)
+  const txBytes = toBase64(TxRaw.encode(twRaw).finish())
   const broadcastBody = {
-    tx_bytes: txBytesHex,
+    tx_bytes: txBytes,
     mode: BroadcastMode.BROADCAST_MODE_SYNC, // if we use async we don't wait for checks on the tx to have passed so we don't get errors
   }
   const broadcastResult = await axios
