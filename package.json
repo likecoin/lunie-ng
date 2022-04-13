@@ -24,6 +24,7 @@
   "dependencies": {
     "@cosmjs/launchpad": "^0.23.1",
     "@cosmjs/launchpad-ledger": "^0.23.1",
+    "@cosmjs/stargate": "^0.28.3",
     "@ledgerhq/hw-transport-webhid": "^5.30.0",
     "@ledgerhq/hw-transport-webusb": "^5.30.0",
     "@likecoin/authcore-js": "^1.1.0-widi",
@@ -33,6 +34,7 @@
     "bignumber.js": "^9.0.1",
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.8.0",
+    "cosmjs-types": "^0.4.1",
     "dayjs": "^1.9.6",
     "lodash": "^4.17.20",
     "nuxt": "^2.15.2",
