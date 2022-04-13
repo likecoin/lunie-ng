@@ -1,11 +1,37 @@
 import BigNumber from 'bignumber.js'
 import { makeStdTx, makeSignDoc } from '@cosmjs/launchpad'
+import { encodeSecp256k1Pubkey } from '@cosmjs/amino'
+import {
+  AminoTypes,
+  defaultRegistryTypes,
+  createBankAminoConverters,
+  createGovAminoConverters,
+  createStakingAminoConverters,
+} from '@cosmjs/stargate'
+import {
+  encodePubkey,
+  makeAuthInfoBytes,
+  Registry,
+} from '@cosmjs/proto-signing'
+import { fromBase64, toHex } from '@cosmjs/encoding'
+import { Int53 } from '@cosmjs/math'
+import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import axios from 'axios'
 import { getSigner } from './signer'
 import messageCreators from './messages.js'
 import fees from '~/common/fees'
 import network from '~/common/network'
 import { signWithExtension } from '~/common/extension-utils'
+
+const prefix = 'cosmos'
+
+const aminoTypes = new AminoTypes({
+  ...createBankAminoConverters(prefix),
+  ...createGovAminoConverters(prefix),
+  ...createStakingAminoConverters(prefix),
+})
+const registry = new Registry(defaultRegistryTypes)
 
 export function getFees(transactionType, feeDenom, gasEstimateMultiplier) {
   const { gasEstimate, feeOptions } = fees.getFees(transactionType)
@@ -96,12 +122,42 @@ export async function createSignBroadcast({
     signedTx = makeStdTx(signed, signature)
   }
 
+  const signedTxBody = {
+    messages: signedTx.msg.map((msg) => aminoTypes.fromAmino(msg)),
+    memo: signedTx.memo,
+  }
+  const signedTxBodyEncodeObject = {
+    typeUrl: '/cosmos.tx.v1beta1.TxBody',
+    value: signedTxBody,
+  }
+  const signedTxBodyBytes = registry.encode(signedTxBodyEncodeObject)
+  const signedGasLimit = Int53.fromString(signedTx.fee.gas).toNumber()
+  const signedSequence = Int53.fromString(accountInfo.sequence).toNumber()
+  const pubkey = encodePubkey(
+    encodeSecp256k1Pubkey(
+      Buffer.from(signedTx.signatures[0].pub_key.value, 'base64')
+    )
+  )
+  const signMode = SignMode.SIGN_MODE_LEGACY_AMINO_JSON
+  const signedAuthInfoBytes = makeAuthInfoBytes(
+    [{ pubkey, sequence: signedSequence }],
+    signedTx.fee.amount,
+    signedGasLimit,
+    signMode
+  )
+  const twRaw = TxRaw.fromPartial({
+    bodyBytes: signedTxBodyBytes,
+    authInfoBytes: signedAuthInfoBytes,
+    signatures: [fromBase64(signedTx.signatures[0].signature)],
+  })
+  const txBytes = TxRaw.encode(twRaw).finish()
+  const txBytesHex = toHex(txBytes)
   const broadcastBody = {
-    tx: signedTx,
+    tx_bytes: txBytesHex,
     mode: 'sync', // if we use async we don't wait for checks on the tx to have passed so we don't get errors
   }
   const broadcastResult = await axios
-    .post(`${network.apiURL}/txs`, broadcastBody)
+    .post(`${network.apiURL}/cosmos/tx/v1beta1/txs`, broadcastBody)
     .then((res) => res.data)
   assertIsBroadcastTxSuccess(broadcastResult)
 
