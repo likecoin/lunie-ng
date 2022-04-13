@@ -17,6 +17,7 @@ import { fromBase64, toHex } from '@cosmjs/encoding'
 import { Int53 } from '@cosmjs/math'
 import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { BroadcastMode } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 import axios from 'axios'
 import { getSigner } from './signer'
 import messageCreators from './messages.js'
@@ -154,7 +155,7 @@ export async function createSignBroadcast({
   const txBytesHex = toHex(txBytes)
   const broadcastBody = {
     tx_bytes: txBytesHex,
-    mode: 'sync', // if we use async we don't wait for checks on the tx to have passed so we don't get errors
+    mode: BroadcastMode.BROADCAST_MODE_SYNC, // if we use async we don't wait for checks on the tx to have passed so we don't get errors
   }
   const broadcastResult = await axios
     .post(`${network.apiURL}/cosmos/tx/v1beta1/txs`, broadcastBody)
