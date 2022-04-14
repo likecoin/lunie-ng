@@ -79,7 +79,7 @@ export default {
       this.loading = true
       this.errorMessage = undefined
       try {
-        const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+        const { Secp256k1HdWallet } = await import('@cosmjs/amino')
         const wallet = await Secp256k1HdWallet.fromMnemonic(
           this.seed,
           await getHDPath(network.HDPath),

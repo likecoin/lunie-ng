@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { makeStdTx, makeSignDoc } from '@cosmjs/launchpad'
-import { encodeSecp256k1Pubkey } from '@cosmjs/amino'
+import { encodeSecp256k1Pubkey, makeStdTx, makeSignDoc } from '@cosmjs/amino'
 import {
   AminoTypes,
   defaultRegistryTypes,
@@ -117,6 +116,7 @@ export async function createSignBroadcast({
       accountInfo.sequence
     )
 
+    console.log('signDoc', signDoc)
     const { signed, signature } = await signer.sign(senderAddress, signDoc)
     signedTx = makeStdTx(signed, signature)
   }

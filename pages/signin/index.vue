@@ -83,7 +83,7 @@ export default {
       this.loading = true
 
       try {
-        const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+        const { Secp256k1HdWallet } = await import('@cosmjs/amino')
         const { wallet } = getWallet(this.signInAddress)
         await Secp256k1HdWallet.deserialize(wallet, this.signInPassword)
         this.$store.dispatch('signIn', {

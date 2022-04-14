@@ -9,7 +9,7 @@ export async function getSigner(
   authcoreCosmosProvider
 ) {
   if (signingType === `local`) {
-    const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+    const { Secp256k1HdWallet } = await import('@cosmjs/amino')
     const { wallet: serializedWallet } = getWallet(address)
     const wallet = await Secp256k1HdWallet.deserialize(
       serializedWallet,
