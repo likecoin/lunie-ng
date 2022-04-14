@@ -116,7 +116,6 @@ export async function createSignBroadcast({
       accountInfo.sequence
     )
 
-    console.log('signDoc', signDoc)
     const { signed, signature } = await signer.sign(senderAddress, signDoc)
     signedTx = makeStdTx(signed, signature)
   }
