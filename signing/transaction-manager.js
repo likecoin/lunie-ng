@@ -25,12 +25,10 @@ import fees from '~/common/fees'
 import network from '~/common/network'
 import { signWithExtension } from '~/common/extension-utils'
 
-const prefix = 'cosmos'
-
 const aminoTypes = new AminoTypes({
-  ...createBankAminoConverters(prefix),
-  ...createGovAminoConverters(prefix),
-  ...createStakingAminoConverters(prefix),
+  ...createBankAminoConverters(network.addressPrefix),
+  ...createGovAminoConverters(network.addressPrefix),
+  ...createStakingAminoConverters(network.addressPrefix),
 })
 const registry = new Registry(defaultRegistryTypes)
 
