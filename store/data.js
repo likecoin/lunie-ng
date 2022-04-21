@@ -3,6 +3,7 @@ import network from '~/common/network'
 // import DataSource from '~/apis/cosmos-source-0.39'
 import DataSource from '~/apis/cosmos-source'
 import { updateValidatorImages } from '~/common/keybase'
+import { changeAddressPrefix } from '~/common/address'
 
 export const state = () => ({
   block: undefined,
@@ -78,7 +79,7 @@ export const actions = {
     const calls = []
     const currency = this.$cookies.get('currency') || 'USD'
     if (session) {
-      const address = session.address
+      const address = changeAddressPrefix(session.address, 'cosmos')
       calls.push(
         dispatch('getBalances', { address, currency }),
         dispatch('getRewards', { address, currency }),
