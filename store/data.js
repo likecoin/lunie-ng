@@ -83,12 +83,7 @@ export const actions = {
     const calls = []
     const currency = this.$cookies.get('currency') || 'USD'
     if (session) {
-      let address = session.address
-      if (isValidLikeAddress(address)) {
-        address = changeAddressPrefix(address, 'cosmos')
-      } else if (isValidCosmosAddress(address)) {
-        address = changeAddressPrefix(address, 'like')
-      }
+      const address = session.address
       calls.push(
         dispatch('getBalances', { address, currency }),
         dispatch('getRewards', { address, currency }),
@@ -220,7 +215,18 @@ export const actions = {
   ) {
     try {
       commit('setTransactionsLoading', true)
-      const transactions = await api.getTransactions(address, pageNumber)
+      const transactionsOrigin = await api.getTransactions(address, pageNumber)
+      if (isValidLikeAddress(address)) {
+        address = changeAddressPrefix(address, 'cosmos')
+      } else if (isValidCosmosAddress(address)) {
+        address = changeAddressPrefix(address, 'like')
+      }
+      const transactionsChangePrefix = await api.getTransactions(
+        address,
+        pageNumber
+      )
+      const transactions = transactionsOrigin.concat(transactionsChangePrefix)
+
       commit('setTransactions', { transactions, pageNumber })
       commit('setTransactionsLoaded', true)
     } catch (err) {
