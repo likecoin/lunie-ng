@@ -43,4 +43,8 @@ module.exports = {
     return `${validator.name} - ${formatAddress(validator.operatorAddress, 20)}`
   },
   pubkeyToAddress,
+  changeAddressPrefix(address, newPrefix) {
+    const { words } = bech32.decode(address)
+    return bech32.encode(newPrefix, words)
+  },
 }
