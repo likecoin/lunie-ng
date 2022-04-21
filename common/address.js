@@ -47,4 +47,10 @@ module.exports = {
     const { words } = bech32.decode(address)
     return bech32.encode(newPrefix, words)
   },
+  isValidLikeAddress(address) {
+    return /^like1[ac-hj-np-z02-9]{38}$/.test(address)
+  },
+  isValidCosmosAddress(address) {
+    return /^cosmos1[ac-hj-np-z02-9]{38}$/.test(address)
+  },
 }
