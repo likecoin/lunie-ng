@@ -215,23 +215,21 @@ export const actions = {
   ) {
     try {
       commit('setTransactionsLoading', true)
-      const transactionsOriginal = api.getTransactions(address, pageNumber)
+      const transactionPromises = [api.getTransactions(address, pageNumber)]
       let prefixChangedAddress
       if (isValidLikeAddress(address)) {
         prefixChangedAddress = changeAddressPrefix(address, 'cosmos')
       } else if (isValidCosmosAddress(address)) {
         prefixChangedAddress = changeAddressPrefix(address, 'like')
       }
-      const transactionsChangePrefix = api.getTransactions(
-        prefixChangedAddress,
-        pageNumber
+      transactionPromises.push(
+        api.getTransactions(prefixChangedAddress, pageNumber)
       )
-      const transactions = []
-      await Promise.all([transactionsOriginal, transactionsChangePrefix]).then(
-        (res) => {
-          res.forEach((e) => transactions.push(...e))
-        }
-      )
+      const [
+        transactionsOriginal,
+        transactionsChangePrefix,
+      ] = await Promise.all(transactionPromises)
+      const transactions = transactionsOriginal.concat(transactionsChangePrefix)
       commit('setTransactions', { transactions, pageNumber })
       commit('setTransactionsLoaded', true)
     } catch (err) {
