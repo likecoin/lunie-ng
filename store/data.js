@@ -222,12 +222,14 @@ export const actions = {
       } else if (isValidCosmosAddress(address)) {
         prefixChangedAddress = changeAddressPrefix(address, 'like')
       }
-      transactionPromises.push(
-        api.getTransactions(prefixChangedAddress, pageNumber)
-      )
+      if (prefixChangedAddress) {
+        transactionPromises.push(
+          api.getTransactions(prefixChangedAddress, pageNumber)
+        )
+      }
       const [
         transactionsOriginal,
-        transactionsChangePrefix,
+        transactionsChangePrefix = [],
       ] = await Promise.all(transactionPromises)
       const transactions = transactionsOriginal.concat(transactionsChangePrefix)
       commit('setTransactions', { transactions, pageNumber })
