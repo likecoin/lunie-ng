@@ -58,7 +58,7 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address.startsWith(this.network.addressPrefix)) {
+      if (address.startsWith('like') || address.startsWith('cosmos')) {
         return true
       } else {
         this.addressError = `Address is not valid for this network`

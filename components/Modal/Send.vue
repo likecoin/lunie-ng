@@ -272,7 +272,10 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address && address.startsWith(this.network.addressPrefix)) {
+      if (
+        address &&
+        (address.startsWith('like') || address.startsWith('cosmos'))
+      ) {
         return true
       } else {
         this.addressError = `prefix does not match this network's prefix`
