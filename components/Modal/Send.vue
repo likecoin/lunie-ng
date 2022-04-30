@@ -272,15 +272,15 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (
-        address &&
-        (address.startsWith('like') || address.startsWith('cosmos'))
-      ) {
-        return true
-      } else {
-        this.addressError = `prefix does not match this network's prefix`
-        return false
+      if (address) {
+        for (let i = 0; i < this.network.allowedAddressPrefix.length; i += 1) {
+          if (address.startsWith(this.network.allowedAddressPrefix[i])) {
+            return true
+          }
+        }
       }
+      this.addressError = `prefix does not match this network's prefix`
+      return false
     },
     validatorAddressValidation(address) {
       if (address && address.includes('valoper')) {

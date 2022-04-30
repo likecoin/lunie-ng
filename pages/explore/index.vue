@@ -58,12 +58,13 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address.startsWith('like') || address.startsWith('cosmos')) {
-        return true
-      } else {
-        this.addressError = `Address is not valid for this network`
-        return false
+      for (let i = 0; i < this.network.allowedAddressPrefix.length; i += 1) {
+        if (address.startsWith(this.network.allowedAddressPrefix[i])) {
+          return true
+        }
       }
+      this.addressError = `Address is not valid for this network`
+      return false
     },
     validatorAddressValidation(address) {
       if (address.includes('valoper')) {
