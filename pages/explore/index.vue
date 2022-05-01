@@ -58,10 +58,13 @@ export default {
       }
     },
     prefixValidation(address) {
-      for (let i = 0; i < this.network.allowedAddressPrefix.length; i += 1) {
-        if (address.startsWith(this.network.allowedAddressPrefix[i])) {
-          return true
-        }
+      if (
+        address &&
+        this.network.allowedAddressPrefix.some((prefix) =>
+          address.startsWith(prefix)
+        )
+      ) {
+        return true
       }
       this.addressError = `Address is not valid for this network`
       return false
