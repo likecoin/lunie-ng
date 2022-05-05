@@ -28,7 +28,25 @@ const formatAddress = (address, length = 4) => {
   }
   return address.split(`1`)[0] + `…` + address.slice(-1 * length)
 }
-
+const changeAddressPrefix = (address, newPrefix) => {
+  const { words } = bech32.decode(address)
+  return bech32.encode(newPrefix, words)
+}
+const isValidLikeAddress = (address) => {
+  return /^like1[ac-hj-np-z02-9]{38}$/.test(address)
+}
+const isValidCosmosAddress = (address) => {
+  return /^cosmos1[ac-hj-np-z02-9]{38}$/.test(address)
+}
+const getDualAddress = (originAddress) => {
+  let prefixChangedAddress
+  if (isValidLikeAddress(originAddress)) {
+    prefixChangedAddress = changeAddressPrefix(originAddress, 'cosmos')
+  } else if (isValidCosmosAddress(originAddress)) {
+    prefixChangedAddress = changeAddressPrefix(originAddress, 'like')
+  }
+  return [prefixChangedAddress, originAddress]
+}
 module.exports = {
   formatAddress,
   decodeB32(value) {
@@ -43,14 +61,8 @@ module.exports = {
     return `${validator.name} - ${formatAddress(validator.operatorAddress, 20)}`
   },
   pubkeyToAddress,
-  changeAddressPrefix(address, newPrefix) {
-    const { words } = bech32.decode(address)
-    return bech32.encode(newPrefix, words)
-  },
-  isValidLikeAddress(address) {
-    return /^like1[ac-hj-np-z02-9]{38}$/.test(address)
-  },
-  isValidCosmosAddress(address) {
-    return /^cosmos1[ac-hj-np-z02-9]{38}$/.test(address)
-  },
+  changeAddressPrefix,
+  isValidLikeAddress,
+  isValidCosmosAddress,
+  getDualAddress,
 }
