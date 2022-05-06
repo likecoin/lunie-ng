@@ -113,11 +113,11 @@ export default {
   computed: {
     ...mapState(['session']),
     transactionCaption() {
-      const dualAddress = getAllowedAddress(this.session.address)
+      const allowedAddress = getAllowedAddress(this.session.address)
       switch (this.transaction.type) {
         case lunieMessageTypes.SEND:
           if (
-            dualAddress.some((item) =>
+            allowedAddress.some((item) =>
               this.transaction.details.to.includes(item)
             )
           ) {
@@ -128,7 +128,7 @@ export default {
         case lunieMessageTypes.SEND_MULTIPLE:
           if (
             this.transaction.rawMessage.message.outputs.filter((a) =>
-              dualAddress.includes(a.address)
+              allowedAddress.includes(a.address)
             ).length > 0
           ) {
             return 'ReceiveMultiple'
@@ -180,10 +180,10 @@ export default {
       }
     },
     receiveMultipleSenderAddress() {
-      const dualAddress = getAllowedAddress(this.session.address)
+      const allowedAddress = getAllowedAddress(this.session.address)
       if (
         this.transaction.rawMessage.message.outputs.filter((a) =>
-          dualAddress.includes(a.address)
+          allowedAddress.includes(a.address)
         ).length > 0
       ) {
         return `from: ${this.transaction.rawMessage.message.inputs[0].address}`
@@ -222,7 +222,7 @@ export default {
       ].includes(this.transaction.type)
     },
     amounts() {
-      const dualAddress = getAllowedAddress(this.session.address)
+      const allowedAddress = getAllowedAddress(this.session.address)
       if (
         this.transaction.details.amounts &&
         this.transaction.type !== lunieMessageTypes.SEND_MULTIPLE) { // eslint-disable-line prettier/prettier
@@ -235,7 +235,7 @@ export default {
         // sendMultiple:
       } else if (
         this.transaction.type === lunieMessageTypes.SEND_MULTIPLE &&
-        dualAddress.includes(this.transaction.details.from[0])
+        allowedAddress.includes(this.transaction.details.from[0])
     // eslint-disable-line prettier/prettier
       ) {
         let totalAmount = new BigNumber(0)
@@ -252,7 +252,7 @@ export default {
         // receiveMultiple:
       } else if (this.transaction.type === lunieMessageTypes.SEND_MULTIPLE) {
         const targetReceiverIndex = this.transaction.details.to.findIndex((o) =>
-          dualAddress.includes(o)
+          allowedAddress.includes(o)
         )
         const receivedLIKE = this.transaction.details.amounts[
           targetReceiverIndex
