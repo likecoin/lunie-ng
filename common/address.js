@@ -33,12 +33,6 @@ const changeAddressPrefix = (address, newPrefix) => {
   const { words } = bech32.decode(address)
   return bech32.encode(newPrefix, words)
 }
-const isValidLikeAddress = (address) => {
-  return /^like1[ac-hj-np-z02-9]{38}$/.test(address)
-}
-const isValidCosmosAddress = (address) => {
-  return /^cosmos1[ac-hj-np-z02-9]{38}$/.test(address)
-}
 
 const getAllowedAddress = (originAddress) => {
   return network.default.allowedAddressPrefix.map((x) =>
@@ -60,7 +54,5 @@ module.exports = {
   },
   pubkeyToAddress,
   changeAddressPrefix,
-  isValidLikeAddress,
-  isValidCosmosAddress,
   getAllowedAddress,
 }

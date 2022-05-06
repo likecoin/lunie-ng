@@ -3,11 +3,7 @@ import network from '~/common/network'
 // import DataSource from '~/apis/cosmos-source-0.39'
 import DataSource from '~/apis/cosmos-source'
 import { updateValidatorImages } from '~/common/keybase'
-import {
-  changeAddressPrefix,
-  isValidLikeAddress,
-  isValidCosmosAddress,
-} from '~/common/address'
+import { getAllowedAddress } from '~/common/address'
 
 export const state = () => ({
   block: undefined,
@@ -215,23 +211,12 @@ export const actions = {
   ) {
     try {
       commit('setTransactionsLoading', true)
-      const transactionPromises = [api.getTransactions(address, pageNumber)]
-      let prefixChangedAddress
-      if (isValidLikeAddress(address)) {
-        prefixChangedAddress = changeAddressPrefix(address, 'cosmos')
-      } else if (isValidCosmosAddress(address)) {
-        prefixChangedAddress = changeAddressPrefix(address, 'like')
-      }
-      if (prefixChangedAddress) {
-        transactionPromises.push(
-          api.getTransactions(prefixChangedAddress, pageNumber)
-        )
-      }
-      const [
-        transactionsOriginal,
-        transactionsChangePrefix = [],
-      ] = await Promise.all(transactionPromises)
-      const transactions = transactionsOriginal.concat(transactionsChangePrefix)
+      const allowedAddress = getAllowedAddress(address)
+      const transactions = [].concat(
+        ...(await Promise.all(
+          allowedAddress.map((x) => api.getTransactions(x, pageNumber))
+        ))
+      )
       commit('setTransactions', { transactions, pageNumber })
       commit('setTransactionsLoaded', true)
     } catch (err) {
