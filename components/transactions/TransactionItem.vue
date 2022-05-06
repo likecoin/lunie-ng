@@ -94,7 +94,7 @@ import { mapState } from 'vuex'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import { prettyLong } from '~/common/numbers'
 import network from '~/common/network'
-import { getDualAddress } from '~/common/address'
+import { getAllowedAddress } from '~/common/address'
 
 export default {
   name: `Transaction`,
@@ -113,7 +113,7 @@ export default {
   computed: {
     ...mapState(['session']),
     transactionCaption() {
-      const dualAddress = getDualAddress(this.session.address)
+      const dualAddress = getAllowedAddress(this.session.address)
       switch (this.transaction.type) {
         case lunieMessageTypes.SEND:
           if (
@@ -180,7 +180,7 @@ export default {
       }
     },
     receiveMultipleSenderAddress() {
-      const dualAddress = getDualAddress(this.session.address)
+      const dualAddress = getAllowedAddress(this.session.address)
       if (
         this.transaction.rawMessage.message.outputs.filter((a) =>
           dualAddress.includes(a.address)
@@ -222,7 +222,7 @@ export default {
       ].includes(this.transaction.type)
     },
     amounts() {
-      const dualAddress = getDualAddress(this.session.address)
+      const dualAddress = getAllowedAddress(this.session.address)
       if (
         this.transaction.details.amounts &&
         this.transaction.type !== lunieMessageTypes.SEND_MULTIPLE) { // eslint-disable-line prettier/prettier
