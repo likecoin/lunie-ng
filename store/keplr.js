@@ -72,7 +72,7 @@ export const actions = {
             average: 10,
             high: 1000,
           },
-          features: ['stargate', 'ibc-transfer'],
+          features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go'],
         })
         await window.keplr.enable(block.chainId)
 

@@ -58,12 +58,16 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address.startsWith(this.network.addressPrefix)) {
+      if (
+        address &&
+        this.network.allowedAddressPrefix.some((prefix) =>
+          address.startsWith(prefix)
+        )
+      ) {
         return true
-      } else {
-        this.addressError = `Address is not valid for this network`
-        return false
       }
+      this.addressError = `Address is not valid for this network`
+      return false
     },
     validatorAddressValidation(address) {
       if (address.includes('valoper')) {

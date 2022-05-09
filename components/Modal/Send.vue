@@ -272,12 +272,16 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address && address.startsWith(this.network.addressPrefix)) {
+      if (
+        address &&
+        this.network.allowedAddressPrefix.some((prefix) =>
+          address.startsWith(prefix)
+        )
+      ) {
         return true
-      } else {
-        this.addressError = `prefix does not match this network's prefix`
-        return false
       }
+      this.addressError = `prefix does not match this network's prefix`
+      return false
     },
     validatorAddressValidation(address) {
       if (address && address.includes('valoper')) {
