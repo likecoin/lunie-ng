@@ -1,5 +1,6 @@
 const crypto = require('crypto')
 const bech32 = require('bech32')
+const network = require('~/common/network.js')
 
 const hexToValidatorAddress = (address, validatorPrefix) => {
   const words = bech32.toWords(Buffer.from(address, 'hex'))
@@ -28,7 +29,16 @@ const formatAddress = (address, length = 4) => {
   }
   return address.split(`1`)[0] + `…` + address.slice(-1 * length)
 }
+const changeAddressPrefix = (address, newPrefix) => {
+  const { words } = bech32.decode(address)
+  return bech32.encode(newPrefix, words)
+}
 
+const getAllowedAddress = (originAddress) => {
+  return network.default.allowedAddressPrefix.map((x) =>
+    changeAddressPrefix(originAddress, x)
+  )
+}
 module.exports = {
   formatAddress,
   decodeB32(value) {
@@ -43,14 +53,6 @@ module.exports = {
     return `${validator.name} - ${formatAddress(validator.operatorAddress, 20)}`
   },
   pubkeyToAddress,
-  changeAddressPrefix(address, newPrefix) {
-    const { words } = bech32.decode(address)
-    return bech32.encode(newPrefix, words)
-  },
-  isValidLikeAddress(address) {
-    return /^like1[ac-hj-np-z02-9]{38}$/.test(address)
-  },
-  isValidCosmosAddress(address) {
-    return /^cosmos1[ac-hj-np-z02-9]{38}$/.test(address)
-  },
+  changeAddressPrefix,
+  getAllowedAddress,
 }

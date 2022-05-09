@@ -94,6 +94,7 @@ import { mapState } from 'vuex'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import { prettyLong } from '~/common/numbers'
 import network from '~/common/network'
+import { getAllowedAddress } from '~/common/address'
 
 export default {
   name: `Transaction`,
@@ -112,17 +113,22 @@ export default {
   computed: {
     ...mapState(['session']),
     transactionCaption() {
+      const allowedAddress = getAllowedAddress(this.session.address)
       switch (this.transaction.type) {
         case lunieMessageTypes.SEND:
-          if (this.transaction.details.to.includes(this.session.address)) {
+          if (
+            allowedAddress.some((item) =>
+              this.transaction.details.to.includes(item)
+            )
+          ) {
             return 'Receive'
           } else {
             return 'Send'
           }
         case lunieMessageTypes.SEND_MULTIPLE:
           if (
-            this.transaction.rawMessage.message.outputs.filter(
-              (a) => a.address === this.session.address
+            this.transaction.rawMessage.message.outputs.filter((a) =>
+              allowedAddress.includes(a.address)
             ).length > 0
           ) {
             return 'ReceiveMultiple'
@@ -174,9 +180,10 @@ export default {
       }
     },
     receiveMultipleSenderAddress() {
+      const allowedAddress = getAllowedAddress(this.session.address)
       if (
-        this.transaction.rawMessage.message.outputs.filter(
-          (a) => a.address === this.session.address
+        this.transaction.rawMessage.message.outputs.filter((a) =>
+          allowedAddress.includes(a.address)
         ).length > 0
       ) {
         return `from: ${this.transaction.rawMessage.message.inputs[0].address}`
@@ -215,6 +222,7 @@ export default {
       ].includes(this.transaction.type)
     },
     amounts() {
+      const allowedAddress = getAllowedAddress(this.session.address)
       if (
         this.transaction.details.amounts &&
         this.transaction.type !== lunieMessageTypes.SEND_MULTIPLE) { // eslint-disable-line prettier/prettier
@@ -227,7 +235,8 @@ export default {
         // sendMultiple:
       } else if (
         this.transaction.type === lunieMessageTypes.SEND_MULTIPLE &&
-        this.transaction.details.from[0] === this.session.address // eslint-disable-line prettier/prettier
+        allowedAddress.includes(this.transaction.details.from[0])
+    // eslint-disable-line prettier/prettier
       ) {
         let totalAmount = new BigNumber(0)
         this.transaction.details.amounts.forEach((a) => {
@@ -242,8 +251,8 @@ export default {
 
         // receiveMultiple:
       } else if (this.transaction.type === lunieMessageTypes.SEND_MULTIPLE) {
-        const targetReceiverIndex = this.transaction.details.to.findIndex(
-          (o) => o === this.session.address
+        const targetReceiverIndex = this.transaction.details.to.findIndex((o) =>
+          allowedAddress.includes(o)
         )
         const receivedLIKE = this.transaction.details.amounts[
           targetReceiverIndex
