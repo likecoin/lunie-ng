@@ -1,15 +1,15 @@
 export default {
-  id: 'likecoin-mainnet-2',
-  name: 'LikeCoin chain',
+  id: 'nft-dev', // DEPRECATE, only used for Lunie extension, NOT CHAIN ID
+  name: 'LikeCoin NFT dev test chain',
   description:
     'LikeCoin is a decentralized publishing infrastructure. It provides a comprehensive metadata framework to facilitate content registration, licensing, and monetization for all media types.',
   logo: `logo.svg`,
-  website: 'https://like.co',
-  siteURL: 'https://dao.like.co',
-  apiURL: 'https://mainnet-node.like.co',
-  rpcURL: 'https://mainnet-node.like.co/rpc/',
-  stakingWalletURL: 'https://dao.like.co',
-  authcoreURL: 'https://authcore.like.co',
+  website: 'https://rinkeby.like.co',
+  siteURL: 'https://likecoin-chain-nft-dev.netlify.app',
+  apiURL: 'https://node.nft-dev.like.co',
+  rpcURL: 'https://node.nft-dev.like.co/rpc/',
+  authcoreURL: 'https://likecoin-integration-test.authcore.io',
+  stakingWalletURL: 'https://likecoin-chain-nft-dev.netlify.app',
   minBlockHeight: 1,
   stakingDenom: 'LIKE',
   coinLookup: [
@@ -47,7 +47,7 @@ export default {
       ],
     },
   },
-  icon: `https://like.co/logo.png`,
+  icon: `https://rinkeby.like.co/logo.png`,
 
   // This is only to be used as a developer tool and for testing purposes
   // NEVER ENABLE LOCALSIGNING IN PRODUCTION OR FOR MAINNETS
