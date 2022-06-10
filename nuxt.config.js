@@ -1,3 +1,5 @@
+import network from './network'
+
 export default {
   // Build the app as a static site instead of Server Side Rendered (SSR)
   // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
@@ -26,6 +28,13 @@ export default {
       },
     ],
     link: [
+      {
+        rel: 'preload',
+        href: `https://fonts.googleapis.com/icon?family=Material+Icons`,
+        as: 'style',
+      },
+      { rel: 'preload', href: `${network.apiURL}/blocks/1`, as: 'fetch' },
+      { rel: 'preconnect', href: 'https://keybase.io' },
       {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
