@@ -41,7 +41,7 @@ export const actions = {
         })
         if (
           !Object.values(supportedChains).find((l) =>
-            l.find((c) => c === network.name)
+            l.find((c) => c.toLowerCase() === network.name.toLowerCase())
           )
         ) {
           await window.cosmostation.tendermint.request({
@@ -67,10 +67,15 @@ export const actions = {
             },
           })
         }
-        let account = await window.cosmostation.tendermint.request({
-          method: 'ten_account',
-          params: { chainName: network.name },
-        })
+        let account
+        try {
+          account = await window.cosmostation.tendermint.request({
+            method: 'ten_account',
+            params: { chainName: network.name },
+          })
+        } catch (err) {
+          console.error(err)
+        }
         if (!account) {
           account = await window.cosmostation.tendermint.request({
             method: 'ten_requestAccount',
