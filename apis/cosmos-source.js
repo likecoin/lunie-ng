@@ -216,17 +216,15 @@ export default class CosmosAPI {
     if (this.validatorsState === 'pending') return
     this.validatorsState = 'pending'
     const [
-      { result: bondedValidators },
-      { result: unbondingValidators },
-      { result: unbondedValidators },
-      { result: unspecifiedValidators },
+      { validators: bondedValidators },
+      { validators: unbondingValidators },
+      { validators: unbondedValidators },
       annualProvision,
       pool
     ] = await Promise.all([
-      this.query(`staking/validators?status=BOND_STATUS_BONDED`),
-      this.query(`staking/validators?status=BOND_STATUS_UNBONDING`),
-      this.query(`staking/validators?status=BOND_STATUS_UNBONDED`),
-      this.query(`staking/validators?status=BOND_STATUS_UNSPECIFIED`),
+      this.query(`cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED`),
+      this.query(`cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDING`),
+      this.query(`cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDED`),
       this.getAnnualProvision().catch(() => undefined),
       this.query(`cosmos/staking/v1beta1/pool`)
     ])
@@ -234,7 +232,7 @@ export default class CosmosAPI {
       (sum, { delegator_shares: delegatorShares }) => sum.plus(delegatorShares),
       BigNumber(0)
     )
-    const allValidators = bondedValidators.concat(unbondingValidators, unbondedValidators, unspecifiedValidators)
+    const allValidators = bondedValidators.concat(unbondingValidators, unbondedValidators)
     const reducedValidators = allValidators.map(validator => reducers.validatorReducer(validator, annualProvision, totalShares, pool))
     this.validators = keyBy(reducedValidators, 'operatorAddress')
     this.validatorsState = 'fetched'

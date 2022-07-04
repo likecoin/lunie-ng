@@ -144,7 +144,7 @@ export function topVoterReducer(topVoter) {
 }
 
 function getValidatorStatus(validator) {
-  if (validator.status === 3) {
+  if (validator.status === 'BOND_STATUS_BONDED') {
     return {
       status: 'ACTIVE',
       status_detailed: 'active',
@@ -700,7 +700,7 @@ export function validatorReducer(validator, annualProvision, totalShares, pool) 
     website: websiteURL,
     identity: validator.description.identity,
     name: validator.description.moniker,
-    votingPower: validator.status === 3 ? (validator.delegator_shares / totalShares).toFixed(6) : '0',
+    votingPower: validator.status === 'BOND_STATUS_BONDED' ? (validator.delegator_shares / totalShares).toFixed(6) : '0',
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
