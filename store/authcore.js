@@ -4,6 +4,7 @@ import {
   AuthcoreCosmosProvider,
 } from '@likecoin/secretd-js'
 import network from '~/common/network'
+import { convertAddressPrefix } from '~/common/b32'
 
 export const state = () => ({
   authClient: null,
@@ -62,7 +63,10 @@ export const actions = {
       client: kvClient,
     })
     commit('setCosmosProvider', cosmosProvider)
-    const accounts = await cosmosProvider.getAddresses()
+    let accounts = await cosmosProvider.getAddresses()
+    accounts = accounts.map((a) =>
+      convertAddressPrefix(a, network.addressPrefix)
+    )
     commit('setAccounts', accounts)
     return cosmosProvider
   },
@@ -87,7 +91,10 @@ export const actions = {
     if (cosmosProvider) {
       return {
         sign: async (_, data) => {
-          const { signatures, ...signed } = await cosmosProvider.sign(data)
+          const { signatures, ...signed } = await cosmosProvider.sign(
+            data,
+            state.accounts[0]
+          )
           return { signed, signature: signatures[0] }
         },
       }

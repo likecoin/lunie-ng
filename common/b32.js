@@ -11,4 +11,8 @@ module.exports = {
     const words = bech32.toWords(Buffer.from(value, type))
     return bech32.encode(prefix, words)
   },
+  convertAddressPrefix(address, prefix = 'like') {
+    const { words } = bech32.decode(address)
+    return bech32.encode(prefix, words)
+  },
 }
