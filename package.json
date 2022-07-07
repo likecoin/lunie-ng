@@ -27,7 +27,7 @@
     "@ledgerhq/hw-transport-webhid": "^5.30.0",
     "@ledgerhq/hw-transport-webusb": "^5.30.0",
     "@likecoin/authcore-js": "^1.1.0-widi",
-    "@likecoin/secretd-js": "^0.1.0",
+    "@likecoin/secretd-js": "^0.4.3",
     "@nuxtjs/axios": "^5.12.2",
     "bech32": "^1.1.4",
     "bignumber.js": "^9.0.1",
