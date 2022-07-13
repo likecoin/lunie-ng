@@ -260,6 +260,7 @@ const proposalTypeEnumDictionary = {
   TextProposal: 'TEXT',
   CommunityPoolSpendProposal: 'TREASURY',
   ParameterChangeProposal: 'PARAMETER_CHANGE',
+  SoftwareUpgradeProposal: 'UPGRADE',
 }
 
 function checkIsIgnoredMessageType(type) {

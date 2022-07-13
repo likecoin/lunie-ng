@@ -6,7 +6,7 @@
     >
       <h4>Description</h4>
       <div class="description">
-        <pre>{{ proposal.description }}</pre>
+        <pre>{{ formattedDescription }}</pre>
       </div>
     </section>
     <p class="summary">{{ proposal.summary }}</p>
@@ -20,6 +20,12 @@ export default {
     proposal: {
       type: Object,
       default: () => {},
+    },
+  },
+  computed: {
+    formattedDescription() {
+      if (!(this.proposal && this.proposal.description)) return ''
+      return this.proposal.description.replaceAll('\\n', '\n')
     },
   },
 }
