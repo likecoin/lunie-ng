@@ -7,6 +7,7 @@
       <GovernanceProposalHeader
         :proposal="proposal"
         :status="status"
+        :disabled="isChainUpgrading"
         @open-vote-modal="onVote"
         @open-deposit-modal="onDeposit"
       />
@@ -67,6 +68,7 @@ import {
   governanceStatusEnum,
 } from '~/common/proposal-status'
 import network from '~/common/network'
+import networkConfig from '~/network'
 
 export default {
   name: `PageProposal`,
@@ -138,6 +140,9 @@ export default {
         this.proposal.detailedVotes &&
         this.status.value === governanceStatusEnum.DEPOSITING
       )
+    },
+    isChainUpgrading() {
+      return !!networkConfig.isChainUpgrading
     },
   },
   watch: {

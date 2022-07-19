@@ -18,6 +18,7 @@
             class="action-button"
             value="Deposit"
             color="primary"
+            :disabled="disabled"
             @click.native="$emit(`open-deposit-modal`)"
           />
           <CommonButton
@@ -26,6 +27,7 @@
             class="action-button"
             value="Vote"
             color="primary"
+            :disabled="disabled"
             @click.native="$emit(`open-vote-modal`)"
           />
         </div>
@@ -89,6 +91,10 @@ export default {
     status: {
       type: Object,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
     },
   },
   data: () => ({

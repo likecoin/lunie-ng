@@ -24,6 +24,7 @@ export default {
   mounted() {
     const session = this.$cookies.get('lunie-session')
     this.$store.dispatch('signIn', session) // calls 'data/refresh' to load the users data
+    this.$store.dispatch('data/setChainUpgradeAlert') // shows warning message if the network config 'isChainUpgrading' is true
   },
 }
 </script>

@@ -31,15 +31,19 @@
           </div>
         </div>
         <div class="action-buttons">
-          <CommonButton :value="`Stake`" @click.native="openStakeModal" />
           <CommonButton
-            :disabled="!delegation"
+            :disabled="isChainUpgrading"
+            :value="`Stake`"
+            @click.native="openStakeModal"
+          />
+          <CommonButton
+            :disabled="!delegation || isChainUpgrading"
             :value="`Unstake`"
             type="secondary"
             @click.native="openUnstakeModal"
           />
           <CommonButton
-            :disabled="!delegation"
+            :disabled="!delegation || isChainUpgrading"
             :value="`Restake`"
             type="secondary"
             @click.native="openRestakeModal"
@@ -159,6 +163,7 @@ import { shortDecimals, fullDecimals, percent } from '~/common/numbers'
 import { noBlanks } from '~/common/strings'
 import { date, fromNow } from '~/common/time'
 import network from '~/common/network'
+import networkConfig from '~/network'
 
 export default {
   name: `PageValidator`,
@@ -198,6 +203,9 @@ export default {
       return this.rewards.filter(
         ({ validator: { operatorAddress } }) => operatorAddress === this.address
       )
+    },
+    isChainUpgrading() {
+      return !!networkConfig.isChainUpgrading
     },
   },
   watch: {

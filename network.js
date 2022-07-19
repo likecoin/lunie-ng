@@ -52,4 +52,5 @@ export default {
   // This is only to be used as a developer tool and for testing purposes
   // NEVER ENABLE LOCALSIGNING IN PRODUCTION OR FOR MAINNETS
   localSigning: false,
+  isChainUpgrading: false,
 }

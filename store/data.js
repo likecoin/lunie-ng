@@ -1,5 +1,6 @@
 import { keyBy, uniqBy } from 'lodash'
 import network from '~/common/network'
+import networkConfig from '~/network'
 // import DataSource from '~/apis/cosmos-source-0.39'
 import DataSource from '~/apis/cosmos-source'
 import { updateValidatorImages } from '~/common/keybase'
@@ -312,6 +313,21 @@ export const actions = {
         { root: true }
       )
     }
+    return []
+  },
+  setChainUpgradeAlert({ commit }) {
+    if (networkConfig.isChainUpgrading) {
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message:
+            'LikeCoin chain is being upgraded.During this period, some services may be affected until the upgrade is completed.',
+        },
+        { root: true }
+      )
+    }
+
     return []
   },
   async getAccountInfo({ state: { api } }, address) {

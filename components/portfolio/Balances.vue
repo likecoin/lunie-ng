@@ -4,7 +4,7 @@
       <h1>Your Balances</h1>
       <CommonButton
         id="claim-button"
-        :disabled="!readyToWithdraw || !balancesLoaded"
+        :disabled="!readyToWithdraw || !balancesLoaded || isChainUpgrading"
         value="Claim Rewards"
         @click.native="readyToWithdraw && openClaimModal()"
       />
@@ -20,7 +20,7 @@
         v-for="balance in sortedBalances"
         :key="balance.id"
         :balance="balance"
-        :send="true"
+        :send="!isChainUpgrading"
         @open-send-modal="openSendModal(balance.denom)"
       />
     </CommonTableContainer>
@@ -139,6 +139,9 @@ export default {
           value: `available`,
         },
       ]
+    },
+    isChainUpgrading() {
+      return !!network.isChainUpgrading
     },
   },
   methods: {
