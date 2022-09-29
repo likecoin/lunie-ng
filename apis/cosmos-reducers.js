@@ -298,6 +298,14 @@ export function getMessageType(type) {
       return lunieMessageTypes.UPDATE_ISCN_RECORD
     case 'likechain.iscn.MsgChangeIscnRecordOwnership':
       return lunieMessageTypes.CHANGE_ISCN_OWNERSHIP
+    case 'likechain.likenft.v1.MsgNewClass':
+      return lunieMessageTypes.CREATE_NFT_CLASS;
+    case 'likechain.likenft.v1.MsgMintNFT':
+      return lunieMessageTypes.MINT_NFT;
+    case 'cosmos.authz.v1beta1.MsgExec':
+      return lunieMessageTypes.COLLECT_NFT;
+    case 'cosmos.nft.v1beta1.MsgSend':
+      return lunieMessageTypes.TRANSFER_NFT;
     default:
       return lunieMessageTypes.UNKNOWN
   }
@@ -424,6 +432,32 @@ export function depositDetailsReducer(message) {
   }
 }
 
+function mintNFTDetailsReducer(message) {
+  return {
+    creator: message.creator,
+    classId: message.class_id,
+    nftId: message.id,
+  }
+}
+
+function collectNFTDetailsReducer(message) {
+  const msg = message.msgs[0]
+  return {
+    from: [msg.from_address],
+    to: [msg.to_address],
+    amounts: msg.amount.map(coinReducer),
+  }
+}
+
+function transferNFTDetailsReducer(message) {
+  return {
+    from: message.sender,
+    to: message.receiver,
+    classId: message.class_id,
+    nftId: message.id,
+  }
+}
+
 // function to map cosmos messages to our details format
 export function transactionDetailsReducer(type, message, transaction) {
   let details
@@ -454,6 +488,15 @@ export function transactionDetailsReducer(type, message, transaction) {
       break
     case lunieMessageTypes.DEPOSIT:
       details = depositDetailsReducer(message)
+      break
+    case lunieMessageTypes.MINT_NFT:
+      details = mintNFTDetailsReducer(message)
+      break
+    case lunieMessageTypes.COLLECT_NFT:
+      details = collectNFTDetailsReducer(message)
+      break
+    case lunieMessageTypes.TRANSFER_NFT:
+      details = transferNFTDetailsReducer(message)
       break
     default:
       details = {}
