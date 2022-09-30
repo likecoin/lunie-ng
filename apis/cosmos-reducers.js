@@ -435,7 +435,7 @@ export function depositDetailsReducer(message) {
 function mintNFTDetailsReducer(message) {
   return {
     creator: message.creator,
-    classId: message.class_id,
+    nftClassId: message.class_id,
     nftId: message.id,
   }
 }
@@ -453,7 +453,7 @@ function transferNFTDetailsReducer(message) {
   return {
     from: message.sender,
     to: message.receiver,
-    classId: message.class_id,
+    nftClassId: message.class_id,
     nftId: message.id,
   }
 }

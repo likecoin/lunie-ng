@@ -48,8 +48,8 @@
                 {{ iscnId }}
               </p>
             </template>
-            <template v-if="classId">
-              <p>{{ classId }}</p>
+            <template v-if="nftClassId">
+              <p>{{ nftClassId }}</p>
             </template>
           </div>
           <div v-if="includesValidatorAddresses" class="validator-images">
@@ -292,13 +292,13 @@ export default {
       }
       return null
     },
-    classId() {
+    nftClassId() {
       if (
         this.transaction.type === lunieMessageTypes.CREATE_NFT_CLASS ||
         this.transaction.type === lunieMessageTypes.MINT_NFT ||
         this.transaction.type === lunieMessageTypes.TRANSFER_NFT
       ) {
-        return this.transaction.details.classId
+        return this.transaction.details.nftClassId
       } else {
         return ''
       }
