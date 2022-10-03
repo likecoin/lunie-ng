@@ -99,6 +99,11 @@ import { prettyLong } from '~/common/numbers'
 import network from '~/common/network'
 import { getAllowedAddress } from '~/common/address'
 
+const LIKECOIN_NFT_API_WALLET =
+  network.id === 'likecoin-mainnet-2'
+    ? 'like17m4vwrnhjmd20uu7tst7nv0kap6ee7js69jfrs'
+    : 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
+
 export default {
   name: `Transaction`,
   filters: {
@@ -166,11 +171,12 @@ export default {
           return `Create NFT Class`
         case lunieMessageTypes.MINT_NFT:
           return `Mint NFT`
-        case lunieMessageTypes.COLLECT_NFT:
+        case lunieMessageTypes.GRANT:
           if (
             allowedAddress.some((item) =>
               this.transaction.details.from.includes(item)
-            )
+            ) &&
+            this.transaction.details.grantee === LIKECOIN_NFT_API_WALLET
           ) {
             return `Collect NFT`
           } else {
@@ -200,7 +206,7 @@ export default {
         for (let i = 0; i < this.transaction.events.length; i++) {
           if (this.transaction.events[i]) {
             for (let j = 0; j < this.transaction.events[i].length; j++) {
-              const iscnEvent = this.transaction.events[i][j].attributes.find((a)=> a.key === 'iscn_id') // eslint-disable-line prettier/prettier
+              const iscnEvent = this.transaction.events[i][j].attributes.find((a) => a.key === 'iscn_id') // eslint-disable-line prettier/prettier
               if (iscnEvent) return iscnEvent.value
             }
           }
@@ -267,7 +273,7 @@ export default {
       } else if (
         this.transaction.type === lunieMessageTypes.SEND_MULTIPLE &&
         allowedAddress.includes(this.transaction.details.from[0])
-    // eslint-disable-line prettier/prettier
+        // eslint-disable-line prettier/prettier
       ) {
         let totalAmount = new BigNumber(0)
         this.transaction.details.amounts.forEach((a) => {

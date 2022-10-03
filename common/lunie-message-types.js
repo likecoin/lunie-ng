@@ -13,7 +13,7 @@ const lunieMessageTypes = {
   CHANGE_ISCN_OWNERSHIP: `ChangeISCNOwnership`,
   CREATE_NFT_CLASS: `CreateNFTClassTx`,
   MINT_NFT: `MintNFTTx`,
-  COLLECT_NFT: `CollectNFTTx`,
+  GRANT: `GrantTx`,
   TRANSFER_NFT: `TransferNFTTx`,
   UNKNOWN: `UnknownTx`,
 }
