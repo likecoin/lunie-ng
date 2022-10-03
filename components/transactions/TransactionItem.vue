@@ -180,7 +180,7 @@ export default {
           ) {
             return `Collect NFT`
           } else {
-            return ``
+            return `Grant`
           }
         case lunieMessageTypes.TRANSFER_NFT:
           if (allowedAddress.includes(this.transaction.details.to)) {
