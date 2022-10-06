@@ -167,7 +167,15 @@ export default {
         case lunieMessageTypes.MINT_NFT:
           return `Mint NFT`
         case lunieMessageTypes.GRANT:
-          return `Grant`
+          if (
+            this.transaction.details.from.some((addr) =>
+              allowedAddress.includes(addr)
+            )
+          ) {
+            return `Grant`
+          } else {
+            return ``
+          }
         case lunieMessageTypes.TRANSFER_NFT:
           if (allowedAddress.includes(this.transaction.details.to)) {
             return `Receive NFT`
