@@ -523,8 +523,8 @@ export default class CosmosAPI {
       chunk(trace.path.split('/'), 2).map(async ([port, channel]) => {
         const result = await this.get(
           `/ibc/core/channel/v1/channels/${channel}/ports/${port}/client_state`
-        )
-        return result.identified_client_state.client_state.chain_id
+        ).catch((_) => undefined)
+        return result ? result.identified_client_state.client_state.chain_id : null;
       })
     )
     return {
