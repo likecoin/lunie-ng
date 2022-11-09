@@ -6,9 +6,9 @@
   [headers.values]
     Content-Security-Policy = '''
       default-src 'self' https://*.netlify.app;
-      connect-src 'self' data: https://keybase.io https://lcd.nylira.net https://*.like.co https://*.authcore.io;
+      connect-src 'self' data: https://keybase.io https://lcd.nylira.net https://*.like.co https://*.authcore.io https://www.googletagmanager.com https://www.google-analytics.com;
       img-src 'self' data: https://*.netlify.app https://s3.amazonaws.com;
-      script-src 'self' 'unsafe-eval' 'sha256-tempUn1btibnrWwQxEk37lMGV1Nf8FO/GXxNhLEsPdg=' 'sha256-R59bp/dPfAyMYicBFE0YOoSN8jtdBogwonKzttkEnm0=' https://*.netlify.app;
+      script-src 'self' 'unsafe-eval' 'sha256-tempUn1btibnrWwQxEk37lMGV1Nf8FO/GXxNhLEsPdg=' 'sha256-R59bp/dPfAyMYicBFE0YOoSN8jtdBogwonKzttkEnm0=' https://*.netlify.app https://www.googletagmanager.com https://www.google-analytics.com;
       style-src 'self' 'unsafe-inline' https://*.netlify.app https://fonts.googleapis.com;
       media-src 'self' https://*.netlify.app blob:;
       object-src 'self' data: blob: https://*.netlify.app;
