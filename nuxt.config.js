@@ -1,6 +1,11 @@
 import network from './network'
 
+const { GA_TRACKING_ID } = process.env
+
 export default {
+  env: {
+    GA_TRACKING_ID,
+  },
   // Build the app as a static site instead of Server Side Rendered (SSR)
   // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
   ssr: false,
@@ -55,6 +60,7 @@ export default {
     '@/plugins/init.client.js',
     '@/plugins/validate.client.js',
     '@/plugins/scroll-to.client.js',
+    '@/plugins/gtag.client.js',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
