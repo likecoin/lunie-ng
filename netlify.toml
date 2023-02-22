@@ -2,6 +2,14 @@
 # Add in the 'connect-src' line the RPC URLS you might need
 # For example:  https://lcd.nylira.net (Nylira's public Cosmos node)
 [[headers]]
+  for = "/_nuxt/*.js"
+  [headers.values]
+    Cache-Control = '''
+      public,
+      max-age=14400,
+      stale-while-revalidate
+    '''
+[[headers]]
   for = "/*"
   [headers.values]
     Content-Security-Policy = '''
