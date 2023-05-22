@@ -453,9 +453,9 @@ export default class CosmosAPI {
   async getBlock(blockHeight) {
     let block
     if (blockHeight) {
-      block = await this.get(`blocks/${blockHeight}`)
+      block = await this.get(`/cosmos/base/tendermint/v1beta1/blocks/${blockHeight}`)
     } else {
-      block = await this.get(`blocks/latest`)
+      block = await this.get(`/cosmos/base/tendermint/v1beta1/blocks/latest`)
     }
     return this.reducers.blockReducer(block)
   }
