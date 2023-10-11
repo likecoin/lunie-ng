@@ -150,8 +150,11 @@ export default {
       this.getProposalDetails()
     },
   },
-  mounted() {
-    this.$store.dispatch('data/getProposals')
+  async mounted() {
+    await this.$store.dispatch('data/getProposals')
+    if (!this.proposal) {
+      await this.$store.dispatch('data/getProposal', this.proposalId)
+    }
     if (this.proposal) {
       this.getProposalDetails()
     }

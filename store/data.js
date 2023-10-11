@@ -42,6 +42,9 @@ export const mutations = {
       ]
     })
   ),
+  appendProposal(state, proposal) {
+    state.proposals.push(proposal)
+  },
   setTransactions(state, { transactions, pageNumber }) {
     if (pageNumber > 0) {
       state.transactions = uniqBy(
@@ -243,6 +246,22 @@ export const actions = {
         {
           type: 'danger',
           message: 'Getting proposals failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
+  },
+  async getProposal({ commit, state: { api } }, proposalId) {
+    try {
+      const proposal = await api.getProposal(proposalId)
+      commit('appendProposal', proposal)
+      commit('setProposalsLoaded', true)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting proposal failed:' + err.message,
         },
         { root: true }
       )

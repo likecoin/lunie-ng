@@ -371,6 +371,21 @@ export default class CosmosAPI {
     return orderBy(proposals, 'id', 'desc')
   }
 
+  async getProposal(proposalId) {
+    const [
+      proposalResponse,
+      { pool },
+    ] = await Promise.all([
+      this.query(`cosmos/gov/v1beta1/proposals/${proposalId}`),
+      this.query('cosmos/staking/v1beta1/pool'),
+    ])
+    const proposal = this.reducers.proposalReducer(
+      proposalResponse.proposal || {},
+      pool.bonded_tokens,
+    )
+    return proposal;
+  }
+
   async getProposalDetails(proposal) {
     const [
       { tally_params: tallyParams },
