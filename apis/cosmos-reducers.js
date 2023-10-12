@@ -68,10 +68,10 @@ function getTotalVotePercentage(proposal, totalBondedTokens, totalVoted) {
 export function tallyReducer(
   proposal,
   tally = {
-    yes: '0',
-    no: '0',
-    abstain: '0',
-    no_with_veto: '0',
+    yes_count: '0',
+    no_count: '0',
+    abstain_count: '0',
+    no_with_veto_count: '0',
   },
   totalBondedTokens
 ) {
@@ -81,17 +81,17 @@ export function tallyReducer(
   }
 
   const totalVoted = getStakingCoinViewAmount(
-    BigNumber(tally.yes)
-      .plus(tally.no)
-      .plus(tally.abstain)
-      .plus(tally.no_with_veto)
+    BigNumber(tally.yes_count)
+      .plus(tally.no_count)
+      .plus(tally.abstain_count)
+      .plus(tally.no_with_veto_count)
   )
 
   return {
-    yes: getStakingCoinViewAmount(tally.yes),
-    no: getStakingCoinViewAmount(tally.no),
-    abstain: getStakingCoinViewAmount(tally.abstain),
-    veto: getStakingCoinViewAmount(tally.no_with_veto),
+    yes: getStakingCoinViewAmount(tally.yes_count),
+    no: getStakingCoinViewAmount(tally.no_count),
+    abstain: getStakingCoinViewAmount(tally.abstain_count),
+    veto: getStakingCoinViewAmount(tally.no_with_veto_count),
     total: totalVoted,
     totalVotedPercentage: getTotalVotePercentage(
       proposal,
