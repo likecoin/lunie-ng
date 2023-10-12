@@ -557,14 +557,21 @@ export function proposalReducer(
   proposal,
   totalBondedTokens,
 ) {
-  const typeStringArray = proposal.content["@type"].split('.')
-  const typeString = typeStringArray[typeStringArray.length - 1];
+  let typeString = '';
+  let title = '';
+  let description = '';
+  
+  if (proposal.messages.length) {
+    const typeStringArray = proposal.messages[0]["@type"].split('.');
+    typeString = typeStringArray[typeStringArray.length - 1];
+    ({ title, description } = proposal.messages[0].content);
+  }
   return {
-    id: Number(proposal.proposal_id),
-    proposalId: String(proposal.proposal_id),
+    id: Number(proposal.id),
+    proposalId: String(proposal.id),
     type: proposalTypeEnumDictionary[typeString],
-    title: proposal.content.title,
-    description: proposal.content.description,
+    title,
+    description,
     creationTime: proposal.submit_time,
     status: proposal.status,
     statusBeginTime: proposalBeginTime(proposal),
@@ -672,7 +679,7 @@ export function transactionReducer(transaction) {
           // type,
           message,
         },
-        events: transaction.logs? transaction.logs.map((l) => l.events) : []
+        events: transaction.logs ? transaction.logs.map((l) => l.events) : []
       })
     )
     return returnedMessages

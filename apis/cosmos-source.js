@@ -253,9 +253,9 @@ export default class CosmosAPI {
     const dataAvailable = this.dataExistsInThisChain(proposal.creationTime)
     const votingComplete = ['PROPOSAL_STATUS_PASSED', 'PROPOSAL_STATUS_REJECTED'].includes(proposal.status)
 
-    const votes = dataAvailable ? await this.queryAutoPaginate(`/cosmos/gov/v1beta1/proposals/${id}/votes`) : []
-    const deposits = dataAvailable ? await this.queryAutoPaginate(`/cosmos/gov/v1beta1/proposals/${id}/deposits`) : []
-    const tally = votingComplete ? proposal.tally : (await this.query(`/cosmos/gov/v1beta1/proposals/${id}/tally`)).tally
+    const votes = dataAvailable ? await this.queryAutoPaginate(`/cosmos/gov/v1/proposals/${id}/votes`) : []
+    const deposits = dataAvailable ? await this.queryAutoPaginate(`/cosmos/gov/v1/proposals/${id}/deposits`) : []
+    const tally = votingComplete ? proposal.tally : (await this.query(`/cosmos/gov/v1/proposals/${id}/tally`)).tally
 
     const totalVotingParticipation = BigNumber(tally.yes)
       .plus(tally.abstain)
@@ -342,7 +342,7 @@ export default class CosmosAPI {
     const proposalExistsOnCurrentChain = this.firstBlock.chainId == this.network.chainId
     if (!proposalExistsOnCurrentChain) {
       proposer = await this.query(
-        `/cosmos/gov/v1beta1/proposals/${proposal.proposal_id}/proposer`
+        `/cosmos/gov/v1/proposals/${proposal.proposal_id}/proposer`
       )
     }
     return proposer
@@ -354,7 +354,7 @@ export default class CosmosAPI {
       proposalsResponse,
       { pool },
     ] = await Promise.all([
-      this.queryAutoPaginate('cosmos/gov/v1beta1/proposals'),
+      this.queryAutoPaginate('cosmos/gov/v1/proposals'),
       this.query('cosmos/staking/v1beta1/pool'),
     ])
     if (!Array.isArray(proposalsResponse)) return []
@@ -456,7 +456,7 @@ export default class CosmosAPI {
 
   async getDelegatorVote({ proposalId, address }) {
     const response = await this.query(
-      `cosmos/gov/v1beta1/proposals/${proposalId}/votes`
+      `cosmos/gov/v1/proposals/${proposalId}/votes`
     )
     const votes = response || []
     const vote = votes.find(({ voter }) => voter === address) || {}
