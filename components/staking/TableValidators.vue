@@ -61,23 +61,28 @@ export default {
   },
   computed: {
     sortedEnrichedValidators() {
-      const enrichedValidators = this.validators.map((validator) => {
-        const delegation = this.getDelegation(validator)
-        const delegationAmount = delegation ? delegation.amount : 0
-        const rewards = this.getRewards(validator)
-        const rewardAmount = rewards.find(
-          (reward) =>
-            reward.denom === this.stakingDenom && reward.amount > 0.000000001
-        )
-          ? this.filterStakingDenomReward(rewards)
-          : 0
-        return {
-          ...validator,
-          delegationAmount,
-          rewardAmount,
-          smallName: validator.name ? validator.name.toLowerCase() : '',
-        }
-      })
+      if (!this.validators) {
+        return []
+      }
+      const enrichedValidators = this.validators
+        .filter(Boolean)
+        .map((validator) => {
+          const delegation = this.getDelegation(validator)
+          const delegationAmount = delegation ? delegation.amount : 0
+          const rewards = this.getRewards(validator)
+          const rewardAmount = rewards.find(
+            (reward) =>
+              reward.denom === this.stakingDenom && reward.amount > 0.000000001
+          )
+            ? this.filterStakingDenomReward(rewards)
+            : 0
+          return {
+            ...validator,
+            delegationAmount,
+            rewardAmount,
+            smallName: validator.name ? validator.name.toLowerCase() : '',
+          }
+        })
 
       if (this.sort.property === 'random') {
         const validators = orderBy(enrichedValidators, 'votingPower', 'asc')
@@ -121,7 +126,8 @@ export default {
   methods: {
     getDelegation({ operatorAddress }) {
       return this.delegations.find(
-        ({ validator }) => validator.operatorAddress === operatorAddress
+        ({ validator }) =>
+          validator && validator.operatorAddress === operatorAddress
       )
     },
     getRewards({ operatorAddress }) {

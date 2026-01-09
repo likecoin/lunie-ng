@@ -249,7 +249,7 @@ export async function rewardReducer(rewards, validatorsDictionary) {
     validator: validatorsDictionary[reward.validator_address],
   }))
   const multiDenomRewardsArray = await Promise.all(
-    formattedRewards.map(({ reward, validator }) =>
+    formattedRewards.filter(({ validator }) => validator).map(({ reward, validator }) =>
       reduceFormattedRewards(reward, validator)
     )
   )
